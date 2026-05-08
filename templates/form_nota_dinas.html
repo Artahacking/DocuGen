@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="panel">
+
+    <!-- TITLE -->
+    <div class="page-title">
+
+        <div>
+            <h2>Nota Dinas</h2>
+            <p>
+                Form pembuatan Nota Dinas perjalanan dinas
+            </p>
+        </div>
+
+    </div>
+
+    <!-- FORM -->
+    <form method="post">
+
+        <!-- ====================== -->
+        <!-- INFORMASI ARSIP -->
+        <!-- ====================== -->
+
+        <div class="section-title">
+            Informasi Arsip
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Judul Arsip</label>
+
+                <input
+                    type="text"
+                    name="judul"
+                    value="{{ surat.judul if surat else 'Nota Dinas' }}"
+                    placeholder="Masukkan judul arsip"
+                    required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Status Surat</label>
+
+                <select name="status">
+
+                    <option value="Selesai"
+                        {% if surat and surat.status=='Selesai' %}
+                            selected
+                        {% endif %}
+                    >
+                        Selesai
+                    </option>
+
+                    <option value="Draft"
+                        {% if surat and surat.status=='Draft' %}
+                            selected
+                        {% endif %}
+                    >
+                        Draft
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <!-- ====================== -->
+        <!-- INFORMASI NOTA DINAS -->
+        <!-- ====================== -->
+
+        <div class="section-title">
+            Informasi Nota Dinas
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Nomor Surat</label>
+
+                <input
+                    type="text"
+                    name="nomor_surat"
+                    value="{{ data.nomor_surat }}"
+                    placeholder="Contoh : ND-001/RUTAN-PB/2026">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Tanggal Nota</label>
+
+                <input
+                    type="text"
+                    name="tanggal"
+                    value="{{ data.tanggal }}"
+                    placeholder="Contoh : 4 April 2026">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Kepada</label>
+
+                <input
+                    type="text"
+                    name="kepada"
+                    value="{{ data.kepada }}"
+                    placeholder="Tujuan nota dinas">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Hal</label>
+
+                <input
+                    type="text"
+                    name="hal"
+                    value="{{ data.hal }}"
+                    placeholder="Perihal surat">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Lampiran</label>
+
+                <input
+                    type="text"
+                    name="lampiran"
+                    value="{{ data.lampiran }}"
+                    placeholder="Contoh : 1 Berkas">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Kegiatan</label>
+
+                <input
+                    type="text"
+                    name="kegiatan"
+                    value="{{ data.kegiatan }}"
+                    placeholder="Nama kegiatan">
+
+            </div>
+
+        </div>
+
+        <!-- ====================== -->
+        <!-- SURAT TUGAS -->
+        <!-- ====================== -->
+
+        <div class="section-title">
+            Informasi Surat Tugas
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Nomor Surat Tugas</label>
+
+                <input
+                    type="text"
+                    name="nomor_tugas"
+                    value="{{ data.nomor_tugas }}"
+                    placeholder="Nomor surat tugas">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Tanggal Surat Tugas</label>
+
+                <input
+                    type="text"
+                    name="tanggal_tugas"
+                    value="{{ data.tanggal_tugas }}"
+                    placeholder="Tanggal surat tugas">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Nominal Pembayaran</label>
+
+                <input
+                    type="text"
+                    name="nominal"
+                    value="{{ data.nominal }}"
+                    placeholder="Contoh : 5.000.000">
+
+            </div>
+
+        </div>
+
+        <!-- ====================== -->
+        <!-- INFORMASI PEJABAT -->
+        <!-- ====================== -->
+
+        <div class="section-title">
+            Informasi Penandatangan
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Nama Penandatangan</label>
+
+                <input
+                    type="text"
+                    name="ttd_nama"
+                    value="{{ data.ttd_nama }}"
+                    placeholder="Nama penandatangan">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>NIP Penandatangan</label>
+
+                <input
+                    type="text"
+                    name="ttd_nip"
+                    value="{{ data.ttd_nip }}"
+                    placeholder="NIP penandatangan">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Tempat TTD</label>
+
+                <input
+                    type="text"
+                    name="ttd_tempat"
+                    value="{{ data.ttd_tempat }}"
+                    placeholder="Contoh : Pangkalan Brandan">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Tanggal TTD</label>
+
+                <input
+                    type="text"
+                    name="ttd_tanggal"
+                    value="{{ data.ttd_tanggal }}"
+                    placeholder="Contoh : 4 April 2026">
+
+            </div>
+
+        </div>
+
+        <!-- ====================== -->
+        <!-- ISI NOTA -->
+        <!-- ====================== -->
+
+        <div class="section-title">
+            Isi Nota Dinas
+        </div>
+
+        <div class="form-group">
+
+            <label>Isi Surat / Nota Dinas</label>
+
+            <textarea
+                name="isi_pernyataan"
+                rows="10"
+                placeholder="Masukkan isi nota dinas">{{ data.isi_pernyataan }}</textarea>
+
+        </div>
+
+        <!-- BUTTON -->
+        <div class="button-wrap">
+
+            <button class="btn btn-blue">
+
+                💾 Simpan & Preview
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+<style>
+
+    /* ====================== */
+    /* PANEL */
+    /* ====================== */
+
+    .panel{
+        background:#fff;
+        border-radius:22px;
+        padding:30px;
+        box-shadow:
+        0 10px 30px rgba(0,0,0,.05);
+    }
+
+    /* ====================== */
+    /* PAGE TITLE */
+    /* ====================== */
+
+    .page-title{
+        margin-bottom:28px;
+    }
+
+    .page-title h2{
+        font-size:34px;
+        font-weight:800;
+        color:#0f172a;
+        margin-bottom:6px;
+    }
+
+    .page-title p{
+        color:#64748b;
+        font-size:15px;
+    }
+
+    /* ====================== */
+    /* SECTION */
+    /* ====================== */
+
+    .section-title{
+        font-size:18px;
+        font-weight:700;
+        color:#0f172a;
+
+        margin-top:30px;
+        margin-bottom:18px;
+
+        padding-bottom:10px;
+
+        border-bottom:1px solid #e5e7eb;
+    }
+
+    /* ====================== */
+    /* FORM GRID */
+    /* ====================== */
+
+    .form-grid{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:20px;
+    }
+
+    /* ====================== */
+    /* FORM GROUP */
+    /* ====================== */
+
+    .form-group{
+        margin-bottom:18px;
+    }
+
+    .form-group label{
+        display:block;
+        margin-bottom:8px;
+
+        font-size:14px;
+        font-weight:700;
+
+        color:#1e293b;
+    }
+
+    /* ====================== */
+    /* INPUT */
+    /* ====================== */
+
+    input,
+    select,
+    textarea{
+        width:100%;
+
+        padding:14px 16px;
+
+        border:1px solid #dbe2ea;
+
+        border-radius:14px;
+
+        background:#fff;
+
+        font-size:15px;
+
+        transition:.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus{
+        outline:none;
+
+        border-color:#2563eb;
+
+        box-shadow:
+        0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    textarea{
+        resize:vertical;
+        min-height:180px;
+        line-height:1.7;
+    }
+
+    /* ====================== */
+    /* BUTTON */
+    /* ====================== */
+
+    .button-wrap{
+        margin-top:28px;
+    }
+
+    .btn{
+        border:none;
+
+        padding:14px 24px;
+
+        border-radius:14px;
+
+        font-size:15px;
+        font-weight:700;
+
+        cursor:pointer;
+
+        transition:.3s;
+    }
+
+    .btn:hover{
+        transform:translateY(-2px);
+    }
+
+    .btn-blue{
+        background:#0b55d9;
+        color:white;
+
+        box-shadow:
+        0 8px 18px rgba(11,85,217,.22);
+    }
+
+    /* ====================== */
+    /* RESPONSIVE */
+    /* ====================== */
+
+    @media(max-width:900px){
+
+        .form-grid{
+            grid-template-columns:1fr;
+        }
+
+        .panel{
+            padding:22px;
+        }
+
+        .page-title h2{
+            font-size:28px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}

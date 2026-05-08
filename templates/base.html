@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>{{ title or 'Document Generator' }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #f4f7fb;
+            color: #111827;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 270px;
+            background: linear-gradient(180deg, #053b85, #082f68);
+            color: #fff;
+            padding: 22px;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #fff;
+            color: #0b55b7;
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .brand span {
+            font-size: 13px;
+            color: #cfe2ff;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #dbeafe;
+            text-decoration: none;
+            padding: 14px 15px;
+            border-radius: 12px;
+            margin: 6px 0;
+            font-weight: 650;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: #1d65d8;
+            color: #fff;
+        }
+
+        .user-card {
+            position: absolute;
+            left: 22px;
+            right: 22px;
+            bottom: 22px;
+            background: rgba(255,255,255,.1);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fff;
+            color: #175bc2;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+        }
+
+        .main {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+        }
+
+        .topbar {
+            height: 76px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.06);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .stat {
+            background: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(15,23,42,.07);
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .stat .ico {
+            width: 58px;
+            height: 58px;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            font-size: 28px;
+        }
+
+        .blue {
+            background: #eaf3ff;
+            color: #1764d1;
+        }
+
+        .green {
+            background: #e9f9f0;
+            color: #16a34a;
+        }
+
+        .orange {
+            background: #fff3df;
+            color: #f59e0b;
+        }
+
+        .purple {
+            background: #f3eafd;
+            color: #7c3aed;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(15,23,42,.07);
+            margin-top: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+        }
+
+        .menu-card {
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 22px;
+            background: #fff;
+        }
+
+        .menu-card h3 {
+            font-size: 24px;
+            margin: 10px 0 5px;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 18px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-blue {
+            background: #1161d5;
+            color: white;
+        }
+
+        .btn-green {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-orange {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-purple {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .btn-red {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-light {
+            background: #eef2ff;
+            color: #1d4ed8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d6dbe4;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .table th,
+        .table td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .badge.selesai {
+            background: #dcfce7;
+            color: #16803b;
+        }
+
+        .badge.draft {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .preview-wrap {
+            background: #525252;
+            padding: 25px;
+            min-height: 100vh;
+        }
+
+        .toolbar {
+            background: #0b55b7;
+            color: white;
+            padding: 13px 20px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .paper {
+            width: 794px;
+            min-height: 1123px;
+            background: white;
+            margin: 0 auto;
+            padding: 55px 70px;
+            color: #000;
+            font-family: "Times New Roman", serif;
+            font-size: 16px;
+            line-height: 1.45;
+        }
+
+        /* ========================= */
+        /* KOP SURAT RAPI */
+        /* ========================= */
+
+        .kop {
+            width: 100%;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+
+        .kop-inner {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            min-height: 105px;
+        }
+
+        .kop-logo {
+            width: 105px;
+            min-width: 105px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-right: 14px;
+        }
+
+        .kop-logo img {
+            width: 82px;
+            height: 82px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .kop-text {
+            flex: 1;
+            text-align: center;
+            padding-left: 6px;
+            padding-right: 6px;
+            line-height: 1.25;
+        }
+
+        .kop .k1 {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            margin: 1px 0;
+        }
+
+        .kop .kbold {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            margin: 3px 0;
+            white-space: nowrap;
+        }
+
+        .doc-title {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 14px 0 28px;
+        }
+
+        .row-line {
+            display: grid;
+            grid-template-columns: 120px 12px 1fr;
+            margin-bottom: 2px;
+        }
+
+        .num-row {
+            display: grid;
+            grid-template-columns: 25px 1fr;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .ttd {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 45px;
+        }
+
+        .ttd div {
+            width: 260px;
+            text-align: center;
+        }
+
+        .sign-space {
+            height: 70px;
+        }
+
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .doc-table th,
+        .doc-table td {
+            border: 1px solid #000;
+            padding: 5px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        @media print {
+            .sidebar,
+            .topbar,
+            .toolbar,
+            .no-print {
+                display: none !important;
+            }
+
+            .main {
+                margin: 0;
+                width: 100%;
+            }
+
+            .preview-wrap {
+                background: white;
+                padding: 0;
+            }
+
+            .paper {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                padding: 35px 55px;
+            }
+
+            .content {
+                padding: 0;
+            }
+
+            .kop-inner {
+                min-height: 100px;
+            }
+
+            .kop-logo {
+                width: 100px;
+                min-width: 100px;
+            }
+
+            .kop-logo img {
+                width: 78px;
+                height: 78px;
+            }
+        }
+
+        @media(max-width:1100px) {
+            .cards,
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .user-card {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+{% block body %}
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">📄</div>
+            <div>
+                <h2>DocuGen</h2>
+                <span>Document Generator</span>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+            <a href="{{ url_for('surat_new', jenis='sptjm') }}">📝 SPTJM</a>
+            <a href="{{ url_for('surat_new', jenis='laporan_kegiatan') }}">📘 Laporan Kegiatan</a>
+            <a href="{{ url_for('surat_new', jenis='nota_dinas') }}">📄 Nota Dinas</a>
+            <a href="{{ url_for('surat_new', jenis='surat_pernyataan') }}">📑 Surat Pernyataan</a>
+            <a href="{{ url_for('surat_new', jenis='daftar_pengeluaran_rill') }}">💰 Pengeluaran Rill</a>
+            <a href="{{ url_for('arsip') }}">🗂 Arsip Surat</a>
+            <a href="{{ url_for('pengaturan') }}">⚙️ Pengaturan Akun</a>
+            <a href="{{ url_for('logout') }}">🚪 Logout</a>
+        </nav>
+
+        <div class="user-card">
+            <div class="avatar">
+                {{ user.nama_lengkap[:1] if user else 'A' }}
+            </div>
+            <div>
+                <b>{{ user.nama_lengkap if user else 'Admin' }}</b><br>
+                <small>{{ user.role if user else 'Pegawai' }}</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="topbar">
+            <h2>{{ title or 'Dashboard' }}</h2>
+            <div>
+                🔔 &nbsp; Selamat datang,
+                <b>{{ user.nama_lengkap if user else 'Admin' }}</b>
+            </div>
+        </div>
+
+        <section class="content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for m in messages %}
+                        <div class="panel" style="border-left:5px solid #16a34a">
+                            {{ m }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+
+</div>
+{% endblock %}
+</body>
+</html>

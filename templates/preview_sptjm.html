@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="preview-wrap">
+
+    <div class="toolbar no-print">
+        <b>Preview SPTJM</b>
+        <div>
+            <a class="btn btn-light" href="{{ url_for('surat_edit', id=surat.id) }}">Edit</a>
+            <a class="btn btn-light" href="{{ url_for('arsip') }}">Arsip</a>
+            <a class="btn btn-light" href="{{ url_for('surat_pdf', id=surat.id) }}">Download PDF</a>
+            <button class="btn btn-light" onclick="window.print()">Print</button>
+        </div>
+    </div>
+
+    <div class="paper">
+        {% include 'kop.html' %}
+
+        <div class="doc-title">
+            SURAT PERNYATAAN PERTANGGUNG JAWABAN MUTLAK
+        </div>
+
+        <p>Yang bertanda tangan dibawah ini:</p>
+
+        <div class="row-line">
+            <span>Nama</span><span>:</span><span>{{ data.nama }}</span>
+        </div>
+        <div class="row-line">
+            <span>NIP</span><span>:</span><span>{{ data.nip }}</span>
+        </div>
+        <div class="row-line">
+            <span>Pangkat/Gol.</span><span>:</span><span>{{ data.pangkat_gol }}</span>
+        </div>
+        <div class="row-line">
+            <span>Jabatan</span><span>:</span><span>{{ data.jabatan }}</span>
+        </div>
+
+        <br>
+
+       <p>Dengan ini menyatakan sebagai berikut:</p>
+
+        <!-- 🔥 DINAMIS DARI RICH TEXT -->
+        <div style="margin-left:10px">
+            {{ data.isi_pernyataan | safe }}
+        </div>
+
+        <br>
+
+        <p>
+            Demikian pernyataan ini saya buat dengan sebenar-benarnya.
+        </p>
+
+        <div class="ttd">
+            <div></div>
+            <div>
+                {{ data.ttd_tempat }} {{ data.ttd_tanggal }}<br>
+                Yang Melakukan Perjalanan Dinas
+
+                <div class="sign-space"></div>
+
+                ( {{ data.ttd_nama }} )<br>
+                NIP {{ data.ttd_nip }}
+            </div>
+        </div>
+
+        <!-- HALAMAN 2 -->
+        <div style="page-break-before:always"></div>
+
+        <h3 class="center">Rincian Biaya Perjalanan Dinas</h3>
+
+        <!-- BOX UTAMA -->
+        <div class="box-sppd">
+
+            <div class="spd-row">
+                SPD Nomor &nbsp;&nbsp;&nbsp;: {{ data.spd_nomor }}
+            </div>
+
+            <table class="doc-table">
+                <tr>
+                    <th style="width:40px">No</th>
+                    <th>Perincian Biaya</th>
+                    <th style="width:140px">Jumlah Biaya</th>
+                    <th>Keterangan</th>
+                </tr>
+
+                {% set total = namespace(value=0) %}
+
+                {% for r in data.rincian %}
+                {% set angka = (r.jumlah|string).replace('.','')|int %}
+                {% set total.value = total.value + angka %}
+                <tr>
+                    <td class="center">{{ loop.index }}</td>
+                    <td>{{ r.uraian }}</td>
+                    <td class="right">{{ r.jumlah | rupiah }}</td>
+                    <td>{{ r.keterangan }}</td>
+                </tr>
+                {% endfor %}
+
+                <!-- TOTAL -->
+                <tr>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td class="right"><b>{{ total.value | rupiah }}</b></td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <!-- BAGIAN BAWAH -->
+            <div class="box-footer">
+
+                <div class="left">
+                    Telah dibayarkan sebesar Rp. {{ data.telah_dibayarkan }}<br>
+                    ({{ data.telah_dibayarkan_terbilang }})<br><br>
+
+                    Bendahara Pengeluaran
+
+                    <div class="sign-space"></div>
+
+                    {{ data.bendahara_nama }}<br>
+                    NIP.{{ data.bendahara_nip }}
+                </div>
+
+                <div class="right">
+                    {{ data.ttd_tempat }}, {{ data.ttd_tanggal }}<br>
+                    Yang Menerima
+
+                    <div class="sign-space"></div>
+
+                    {{ data.penerima_nama }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PERHITUNGAN -->
+        <h3 class="center">PERHITUNGAN SPPD RAMPUNG</h3>
+
+        <div class="perhitungan-box">
+
+            <div class="row-line">
+                <span>Ditetapkan sejumlah</span><span>:</span>
+                <span>{{ data.ditetapkan | rupiah }}</span>
+            </div>
+
+            <div class="row-line">
+                <span>Yang dibayarkan semula</span><span>:</span>
+                <span>{{ data.dibayarkan_semula | rupiah }}</span>
+            </div>
+
+            <div class="row-line">
+                <span>Sisa kurang/lebih</span><span>:</span>
+                <span>{{ data.sisa | rupiah }}</span>
+            </div>
+
+        </div>
+
+        <div class="center" style="margin-top:40px">
+            {{ data.ttd_tempat }}, {{ data.ttd_tanggal }}<br>
+            <b>Pejabat Pembuat Komitmen</b>
+
+            <div class="sign-space"></div>
+
+            {{ data.ppk_nama }}<br>
+            NIP. {{ data.ppk_nip }}
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+/* BOX SPPD */
+.box-sppd{
+    border:1px solid #000;
+    padding:10px;
+    margin-top:10px;
+}
+
+/* SPD ROW */
+.spd-row{
+    margin-bottom:6px;
+}
+
+/* FOOTER BOX */
+.box-footer{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+}
+
+.box-footer .left{
+    width:45%;
+}
+
+.box-footer .right{
+    width:45%;
+    text-align:center;
+}
+
+/* PERHITUNGAN */
+.perhitungan-box{
+    width:400px;
+    margin:20px auto;
+}
+
+</style>
+
+{% endblock %}

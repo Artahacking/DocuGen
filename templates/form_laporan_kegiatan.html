@@ -1,0 +1,811 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="laporan-page">
+
+    <div class="form-card">
+
+        <!-- HEADER -->
+        <div class="form-header">
+
+            <div>
+                <span class="badge-title">
+                    📑 LAPORAN
+                </span>
+
+                <h2>
+                    {{ 'Edit' if mode=='edit' else 'Buat' }} Laporan Kegiatan
+                </h2>
+
+                <p>
+                    Lengkapi data laporan kegiatan perjalanan dinas dengan benar.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- FORM -->
+        <form method="post">
+
+            <!-- ========================= -->
+            <!-- INFORMASI ARSIP -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title">
+
+                    <span>01</span>
+                    <h3>Informasi Arsip</h3>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Judul Arsip</label>
+
+                        <input
+                            name="judul"
+                            value="{{ surat.judul if surat else 'Laporan Kegiatan' }}"
+                            placeholder="Masukkan judul arsip">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Status</label>
+
+                        <select name="status">
+
+                            <option value="Selesai"
+                                {% if surat and surat.status=='Selesai' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Selesai
+                            </option>
+
+                            <option value="Draft"
+                                {% if surat and surat.status=='Draft' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Draft
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- INFORMASI SURAT -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title">
+
+                    <span>02</span>
+                    <h3>Informasi Surat</h3>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Nomor Surat Kepala</label>
+
+                        <input
+                            name="nomor_surat"
+                            value="{{ data.nomor_surat }}"
+                            placeholder="Nomor surat">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Tanggal Surat</label>
+
+                        <input
+                            name="tanggal"
+                            value="{{ data.tanggal }}"
+                            placeholder="Contoh : 04 April 2026">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Nama Kegiatan</label>
+
+                        <input
+                            name="kegiatan"
+                            value="{{ data.kegiatan }}"
+                            placeholder="Masukkan nama kegiatan">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Tempat Kegiatan</label>
+
+                        <input
+                            name="tempat"
+                            value="{{ data.tempat }}"
+                            placeholder="Tempat kegiatan">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- INFORMASI DIPA -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title">
+
+                    <span>03</span>
+                    <h3>Informasi DIPA</h3>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Nomor DIPA</label>
+
+                        <input
+                            name="nomor_dipa"
+                            value="{{ data.nomor_dipa }}"
+                            placeholder="Masukkan nomor DIPA">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Tanggal DIPA</label>
+
+                        <input
+                            name="tanggal_dipa"
+                            value="{{ data.tanggal_dipa }}"
+                            placeholder="Tanggal DIPA">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- PETUGAS -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title with-button">
+
+                    <div class="title-left">
+
+                        <span>04</span>
+                        <h3>Data Petugas</h3>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-add"
+                        onclick="addP()">
+
+                        + Tambah Petugas
+
+                    </button>
+
+                </div>
+
+                <div id="petugas" class="petugas-wrap">
+
+                    {% for p in data.petugas %}
+
+                    <div class="petugas-card">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Nama</label>
+
+                                <input
+                                    name="petugas_nama[]"
+                                    value="{{ p.nama }}"
+                                    placeholder="Nama petugas">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>NIP</label>
+
+                                <input
+                                    name="petugas_nip[]"
+                                    value="{{ p.nip }}"
+                                    placeholder="NIP petugas">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Pangkat / Gol</label>
+
+                                <input
+                                    name="petugas_pangkat_gol[]"
+                                    value="{{ p.pangkat_gol }}"
+                                    placeholder="Pangkat / Gol">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Jabatan</label>
+
+                                <input
+                                    name="petugas_jabatan[]"
+                                    value="{{ p.jabatan }}"
+                                    placeholder="Jabatan">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- PELAKSANA SPD -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title">
+
+                    <span>05</span>
+                    <h3>Pelaksana SPD</h3>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Nama Pelaksana SPD</label>
+
+                        <input
+                            name="pelaksana_nama"
+                            value="{{ data.pelaksana_nama }}"
+                            placeholder="Nama pelaksana">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>NIP Pelaksana SPD</label>
+
+                        <input
+                            name="pelaksana_nip"
+                            value="{{ data.pelaksana_nip }}"
+                            placeholder="NIP pelaksana">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- URAIAN -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title">
+
+                    <span>06</span>
+                    <h3>Uraian Kegiatan</h3>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Uraian Kegiatan</label>
+
+                    <textarea
+                        id="editor1"
+                        name="uraian_kegiatan"
+                        placeholder="Masukkan uraian kegiatan">{{ data.uraian_kegiatan }}</textarea>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- HASIL -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title">
+
+                    <span>07</span>
+                    <h3>Hasil dan Tindak Lanjut</h3>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Hasil dan Tindak Lanjut</label>
+
+                    <textarea
+                        id="editor2"
+                        name="hasil_tindak_lanjut"
+                        placeholder="Masukkan hasil dan tindak lanjut">{{ data.hasil_tindak_lanjut }}</textarea>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- TTD -->
+            <!-- ========================= -->
+
+            <div class="section-box">
+
+                <div class="section-title">
+
+                    <span>08</span>
+                    <h3>Tanda Tangan</h3>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Tempat TTD</label>
+
+                        <input
+                            name="ttd_tempat"
+                            value="{{ data.ttd_tempat }}"
+                            placeholder="Tempat tanda tangan">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Tanggal TTD</label>
+
+                        <input
+                            name="ttd_tanggal"
+                            value="{{ data.ttd_tanggal }}"
+                            placeholder="Tanggal tanda tangan">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BUTTON -->
+            <div class="form-action">
+
+                <button class="btn-submit">
+
+                    💾 Simpan & Preview
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- CKEDITOR -->
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+<script>
+
+    CKEDITOR.replace('editor1', {
+        height: 220
+    });
+
+    CKEDITOR.replace('editor2', {
+        height: 220
+    });
+
+</script>
+
+<!-- ADD PETUGAS -->
+<script>
+
+function addP(){
+
+    document.getElementById('petugas').insertAdjacentHTML('beforeend', `
+
+        <div class="petugas-card">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Nama</label>
+
+                    <input
+                        name="petugas_nama[]"
+                        placeholder="Nama petugas">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>NIP</label>
+
+                    <input
+                        name="petugas_nip[]"
+                        placeholder="NIP petugas">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Pangkat / Gol</label>
+
+                    <input
+                        name="petugas_pangkat_gol[]"
+                        placeholder="Pangkat / Gol">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Jabatan</label>
+
+                    <input
+                        name="petugas_jabatan[]"
+                        placeholder="Jabatan">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `)
+
+}
+
+</script>
+
+<style>
+
+    .laporan-page{
+        width:100%;
+    }
+
+    .form-card{
+        background:white;
+
+        border-radius:24px;
+
+        padding:34px;
+
+        box-shadow:
+        0 15px 40px rgba(15,23,42,.08);
+
+        border:1px solid #e5eaf3;
+    }
+
+    .form-header{
+        margin-bottom:30px;
+
+        border-bottom:1px solid #e5e7eb;
+
+        padding-bottom:24px;
+    }
+
+    .badge-title{
+        display:inline-flex;
+
+        align-items:center;
+
+        gap:8px;
+
+        background:#eaf3ff;
+
+        color:#0b55d9;
+
+        font-weight:800;
+
+        padding:10px 16px;
+
+        border-radius:999px;
+
+        font-size:14px;
+
+        margin-bottom:16px;
+    }
+
+    .form-header h2{
+        font-size:34px;
+
+        color:#0f172a;
+
+        margin-bottom:10px;
+    }
+
+    .form-header p{
+        color:#64748b;
+
+        font-size:15px;
+    }
+
+    .section-box{
+        background:#f8fbff;
+
+        border:1px solid #e5edf8;
+
+        border-radius:22px;
+
+        padding:24px;
+
+        margin-bottom:26px;
+    }
+
+    .section-title{
+        display:flex;
+
+        align-items:center;
+
+        gap:14px;
+
+        margin-bottom:24px;
+    }
+
+    .section-title span{
+        width:40px;
+        height:40px;
+
+        border-radius:12px;
+
+        background:
+        linear-gradient(
+            135deg,
+            #0b55d9,
+            #2f80ff
+        );
+
+        color:white;
+
+        display:grid;
+        place-items:center;
+
+        font-size:14px;
+        font-weight:800;
+
+        box-shadow:
+        0 8px 18px rgba(11,85,217,.25);
+    }
+
+    .section-title h3{
+        font-size:21px;
+
+        color:#0f172a;
+    }
+
+    .with-button{
+        justify-content:space-between;
+    }
+
+    .title-left{
+        display:flex;
+        align-items:center;
+        gap:14px;
+    }
+
+    .form-grid{
+        display:grid;
+
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:18px;
+    }
+
+    .form-group{
+        display:flex;
+        flex-direction:column;
+        gap:8px;
+    }
+
+    .form-group label{
+        font-size:14px;
+
+        font-weight:800;
+
+        color:#1e293b;
+    }
+
+    input,
+    select,
+    textarea{
+        width:100%;
+
+        border:1px solid #d9e2ef;
+
+        border-radius:14px;
+
+        background:white;
+
+        padding:14px 16px;
+
+        font-size:15px;
+
+        transition:.25s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus{
+        outline:none;
+
+        border-color:#0b55d9;
+
+        box-shadow:
+        0 0 0 4px rgba(11,85,217,.12);
+    }
+
+    textarea{
+        min-height:220px;
+
+        resize:vertical;
+
+        line-height:1.7;
+    }
+
+    .btn-add{
+        border:none;
+
+        background:#eef4ff;
+
+        color:#0b55d9;
+
+        padding:12px 18px;
+
+        border-radius:12px;
+
+        font-weight:800;
+
+        cursor:pointer;
+
+        transition:.25s ease;
+    }
+
+    .btn-add:hover{
+        background:#0b55d9;
+
+        color:white;
+
+        transform:translateY(-2px);
+    }
+
+    .petugas-wrap{
+        display:flex;
+        flex-direction:column;
+        gap:18px;
+    }
+
+    .petugas-card{
+        background:white;
+
+        border:1px solid #e5eaf3;
+
+        border-radius:18px;
+
+        padding:20px;
+
+        box-shadow:
+        0 8px 18px rgba(15,23,42,.04);
+    }
+
+    .form-action{
+        display:flex;
+
+        justify-content:flex-end;
+
+        margin-top:10px;
+    }
+
+    .btn-submit{
+        border:none;
+
+        background:
+        linear-gradient(
+            135deg,
+            #0b55d9,
+            #2f80ff
+        );
+
+        color:white;
+
+        padding:15px 28px;
+
+        border-radius:16px;
+
+        font-size:16px;
+        font-weight:800;
+
+        cursor:pointer;
+
+        transition:.25s ease;
+
+        box-shadow:
+        0 12px 26px rgba(11,85,217,.28);
+    }
+
+    .btn-submit:hover{
+        transform:translateY(-3px);
+
+        box-shadow:
+        0 16px 34px rgba(11,85,217,.36);
+    }
+
+    @media(max-width:1000px){
+
+        .form-grid{
+            grid-template-columns:1fr;
+        }
+
+        .form-card{
+            padding:24px;
+        }
+
+        .form-header h2{
+            font-size:28px;
+        }
+
+        .with-button{
+            flex-direction:column;
+            align-items:flex-start;
+            gap:14px;
+        }
+
+        .btn-submit{
+            width:100%;
+        }
+
+        .form-action{
+            justify-content:stretch;
+        }
+
+    }
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>DocuGen - Document Generator</title>
+
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ICON -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins', sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+      background:linear-gradient(135deg,#071c3b,#0b55d9,#1f8fff);
+      position:relative;
+    }
+
+    /* BACKGROUND EFFECT */
+
+    body::before{
+      content:'';
+      position:absolute;
+      width:500px;
+      height:500px;
+      background:rgba(255,255,255,0.08);
+      border-radius:50%;
+      top:-120px;
+      left:-120px;
+      animation:float 8s infinite ease-in-out;
+    }
+
+    body::after{
+      content:'';
+      position:absolute;
+      width:450px;
+      height:450px;
+      background:rgba(255,255,255,0.05);
+      border-radius:50%;
+      bottom:-150px;
+      right:-120px;
+      animation:float2 10s infinite ease-in-out;
+    }
+
+    @keyframes float{
+      0%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(20px);
+      }
+      100%{
+        transform:translateY(0px);
+      }
+    }
+
+    @keyframes float2{
+      0%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(-25px);
+      }
+      100%{
+        transform:translateY(0px);
+      }
+    }
+
+    /* LOGIN CARD */
+
+    .login-box{
+      position:relative;
+      z-index:10;
+      width:430px;
+      padding:45px 35px;
+      border-radius:30px;
+
+      background:rgba(255,255,255,0.12);
+      backdrop-filter:blur(18px);
+
+      border:1px solid rgba(255,255,255,0.18);
+
+      box-shadow:
+      0 10px 40px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.2);
+
+      animation:fadeUp .8s ease;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(40px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* HEADER */
+
+    .header{
+      text-align:center;
+      margin-bottom:35px;
+    }
+
+    /* LOGO IMAGE */
+
+    .logo-img{
+      width:95px;
+      height:95px;
+      margin:auto;
+      margin-bottom:20px;
+
+      border-radius:24px;
+      overflow:hidden;
+
+      background:white;
+
+      padding:12px;
+
+      box-shadow:
+      0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .logo-img img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .header h1{
+      color:white;
+      font-size:42px;
+      font-weight:700;
+      letter-spacing:1px;
+    }
+
+    .header p{
+      color:rgba(255,255,255,0.8);
+      font-size:14px;
+      margin-top:8px;
+    }
+
+    /* ERROR */
+
+    .err{
+      background:rgba(255,0,0,0.15);
+      border:1px solid rgba(255,0,0,0.25);
+      color:#fff;
+      padding:12px;
+      border-radius:12px;
+      margin-bottom:20px;
+      font-size:14px;
+      text-align:center;
+    }
+
+    /* FORM */
+
+    .input-group{
+      margin-bottom:22px;
+    }
+
+    .input-group label{
+      display:block;
+      color:white;
+      margin-bottom:10px;
+      font-size:14px;
+      font-weight:500;
+    }
+
+    .input-box{
+      position:relative;
+    }
+
+    .input-box i{
+      position:absolute;
+      left:18px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#94a3b8;
+      font-size:15px;
+    }
+
+    .input-box input{
+      width:100%;
+      padding:16px 16px 16px 50px;
+
+      border:none;
+      outline:none;
+
+      border-radius:16px;
+
+      background:rgba(255,255,255,0.92);
+
+      font-size:15px;
+      transition:0.3s;
+    }
+
+    .input-box input:focus{
+      background:white;
+      transform:scale(1.02);
+
+      box-shadow:
+      0 0 0 4px rgba(255,255,255,0.2),
+      0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    /* OPTIONS */
+
+    .options{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+
+      margin-bottom:28px;
+
+      font-size:13px;
+      color:white;
+    }
+
+    .options a{
+      color:#fff;
+      text-decoration:none;
+      transition:0.3s;
+    }
+
+    .options a:hover{
+      opacity:0.8;
+    }
+
+    /* BUTTON */
+
+    .btn-login{
+      width:100%;
+      padding:16px;
+
+      border:none;
+      border-radius:18px;
+
+      background:linear-gradient(135deg,#ffffff,#dbeafe);
+
+      color:#0b55d9;
+
+      font-size:16px;
+      font-weight:700;
+
+      cursor:pointer;
+      transition:0.4s;
+    }
+
+    .btn-login:hover{
+      transform:translateY(-3px) scale(1.02);
+
+      box-shadow:
+      0 15px 30px rgba(0,0,0,0.25);
+    }
+
+    .btn-login i{
+      margin-right:8px;
+    }
+
+    /* FOOTER */
+
+    .footer{
+      margin-top:30px;
+      text-align:center;
+      color:rgba(255,255,255,0.7);
+      font-size:13px;
+    }
+
+    /* MOBILE */
+
+    @media(max-width:500px){
+
+      .login-box{
+        width:92%;
+        padding:35px 25px;
+      }
+
+      .header h1{
+        font-size:34px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <form class="login-box" method="post">
+
+    <!-- HEADER -->
+    <div class="header">
+
+      <!-- LOGO IMAGE -->
+      <div class="logo-img">
+        <img src="{{ url_for('static', filename='img/docugen.jpeg') }}" alt="DocuGen Logo">
+      </div>
+
+      <h1>DocuGen</h1>
+
+      <p>
+        Smart Document Generator Platform
+      </p>
+
+    </div>
+
+    <!-- FLASH MESSAGE -->
+    {% with messages = get_flashed_messages() %}
+      {% for m in messages %}
+        <div class="err">
+          {{ m }}
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- USERNAME -->
+    <div class="input-group">
+
+      <label>Username</label>
+
+      <div class="input-box">
+
+        <i class="fa-solid fa-user"></i>
+
+        <input
+          type="text"
+          name="username"
+          placeholder="Masukkan username"
+          required
+          value="admin"
+        >
+
+      </div>
+
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="input-group">
+
+      <label>Password</label>
+
+      <div class="input-box">
+
+        <i class="fa-solid fa-lock"></i>
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Masukkan password"
+          required
+          value="admin123"
+        >
+
+      </div>
+
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="options">
+
+    </div>
+
+    <!-- BUTTON -->
+    <button type="submit" class="btn-login">
+      <i class="fa-solid fa-right-to-bracket"></i>
+      Masuk Dashboard
+    </button>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      © 2025 DocuGen — Document Generator
+    </div>
+
+  </form>
+
+</body>
+</html>
