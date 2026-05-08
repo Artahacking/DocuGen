@@ -32,11 +32,13 @@ app.secret_key = 'ganti_secret_key_ini'
 # ======================================================
 
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '',
-    'database': 'db_surat_rutan'
+    'host': os.getenv('MYSQLHOST'),
+    'port': int(os.getenv('MYSQLPORT')),
+    'user': os.getenv('MYSQLUSER'),
+    'password': os.getenv('MYSQLPASSWORD'),
+    'database': os.getenv('MYSQLDATABASE')
 }
+
 
 # ======================================================
 # JENIS SURAT
