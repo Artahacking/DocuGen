@@ -370,45 +370,122 @@
             </div>
 
             <!-- ========================= -->
-            <!-- TTD -->
-            <!-- ========================= -->
+<!-- TTD -->
+<!-- ========================= -->
 
-            <div class="section-box">
+<div class="section-box">
 
-                <div class="section-title">
+    <div class="section-title">
 
-                    <span>08</span>
-                    <h3>Tanda Tangan</h3>
+        <span>08</span>
+        <h3>Tanda Tangan</h3>
 
-                </div>
+    </div>
 
-                <div class="form-grid">
+    <!-- TEMPAT DAN TANGGAL -->
+    <div class="form-grid">
 
-                    <div class="form-group">
+        <div class="form-group">
 
-                        <label>Tempat TTD</label>
+            <label>Tempat TTD</label>
 
-                        <input
-                            name="ttd_tempat"
-                            value="{{ data.ttd_tempat }}"
-                            placeholder="Tempat tanda tangan">
+            <input
+                name="ttd_tempat"
+                value="{{ data.ttd_tempat }}"
+                placeholder="Tempat tanda tangan">
 
-                    </div>
+        </div>
 
-                    <div class="form-group">
+        <div class="form-group">
 
-                        <label>Tanggal TTD</label>
+            <label>Tanggal TTD</label>
 
-                        <input
-                            name="ttd_tanggal"
-                            value="{{ data.ttd_tanggal }}"
-                            placeholder="Tanggal tanda tangan">
+            <input
+                name="ttd_tanggal"
+                value="{{ data.ttd_tanggal }}"
+                placeholder="Tanggal tanda tangan">
 
-                    </div>
+        </div>
 
-                </div>
+    </div>
+
+    <!-- ====================================== -->
+    <!-- TTD KIRI DAN KANAN -->
+    <!-- ====================================== -->
+
+    <div class="dual-ttd-grid">
+
+        <!-- ================================= -->
+        <!-- TTD KIRI -->
+        <!-- ================================= -->
+
+        <div class="ttd-card">
+
+            <div class="ttd-card-title">
+                Tanda Tangan Kiri
+            </div>
+
+            <div class="form-group">
+
+                <label>Jabatan TTD Kiri</label>
+
+                <input
+                    name="ttd_kiri_jabatan"
+                    value="{{ data.ttd_kiri_jabatan }}"
+                    placeholder="Contoh : Mengetahui">
 
             </div>
+
+            <div class="form-group">
+
+                <label>Nama TTD Kiri</label>
+
+                <input
+                    name="ttd_kiri_nama"
+                    value="{{ data.ttd_kiri_nama }}"
+                    placeholder="Nama penandatangan kiri">
+
+            </div>
+
+        </div>
+
+        <!-- ================================= -->
+        <!-- TTD KANAN -->
+        <!-- ================================= -->
+
+        <div class="ttd-card">
+
+            <div class="ttd-card-title">
+                Tanda Tangan Kanan
+            </div>
+
+            <div class="form-group">
+
+                <label>Jabatan TTD Kanan</label>
+
+                <input
+                    name="ttd_kanan_jabatan"
+                    value="{{ data.ttd_kanan_jabatan }}"
+                    placeholder="Contoh : Pelaksana SPD">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Nama TTD Kanan</label>
+
+                <input
+                    name="ttd_kanan_nama"
+                    value="{{ data.ttd_kanan_nama }}"
+                    placeholder="Nama penandatangan kanan">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
             <!-- BUTTON -->
             <div class="form-action">
@@ -806,6 +883,39 @@ function addP(){
 
     }
 
+.dual-ttd-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-top:22px;
+}
+
+.ttd-card{
+    background:white;
+    border:1px solid #e5eaf3;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:
+    0 8px 18px rgba(15,23,42,.04);
+}
+
+.ttd-card-title{
+    font-size:16px;
+    font-weight:800;
+    color:#0f172a;
+    margin-bottom:18px;
+}
+
+@media(max-width:1000px){
+
+    .dual-ttd-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
+
+
 
 {% endblock %}
