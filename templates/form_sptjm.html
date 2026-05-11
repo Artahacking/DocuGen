@@ -1,3 +1,5 @@
+<!-- templates/form_sptjm.html -->
+
 {% extends 'base.html' %}
 
 {% block content %}
@@ -45,6 +47,7 @@
                     <div class="form-group">
                         <label>Status</label>
                         <select name="status">
+
                             <option value="Selesai"
                                 {% if surat and surat.status=='Selesai' %}selected{% endif %}>
                                 Selesai
@@ -54,6 +57,7 @@
                                 {% if surat and surat.status=='Draft' %}selected{% endif %}>
                                 Draft
                             </option>
+
                         </select>
                     </div>
 
@@ -93,7 +97,7 @@
                         <label>Pangkat / Golongan</label>
                         <input
                             name="pangkat_gol"
-                            value="{{ data.pangkat_gol }}"
+                            value="{{ data.pangkat_gol if data.pangkat_gol else '' }}"
                             placeholder="Contoh: Penata Muda / III.a"
                             required>
                     </div>
@@ -125,7 +129,7 @@
                         <label>Nomor Surat Tugas</label>
                         <input
                             name="nomor_surat"
-                            value="{{ data.nomor_surat }}"
+                            value="{{ data.nomor_surat if data.nomor_surat else '' }}"
                             placeholder="Nomor surat tugas">
                     </div>
 
@@ -133,8 +137,8 @@
                         <label>Tanggal Surat</label>
                         <input
                             name="tanggal"
-                            value="{{ data.tanggal }}"
-                            placeholder="Contoh: 04 April 2026">
+                            value="{{ data.tanggal if data.tanggal else '' }}"
+                            placeholder="Contoh: 13 April 2026">
                     </div>
 
                     <div class="form-group">
@@ -156,11 +160,13 @@
                 </div>
 
                 <div class="form-group full">
+
                     <label>Isi Pernyataan</label>
+
                     <textarea
                         id="editor"
-                        name="isi_pernyataan"
-                        placeholder="Tulis isi pernyataan di sini">{{ data.isi_pernyataan }}</textarea>
+                        name="isi_pernyataan">{{ data.isi_pernyataan }}</textarea>
+
                 </div>
 
             </div>
@@ -180,7 +186,7 @@
                         <input
                             name="biaya_perjalanan"
                             value="{{ data.biaya_perjalanan }}"
-                            placeholder="Contoh: 5000000">
+                            placeholder="Contoh: Rp.235.000">
                     </div>
 
                     <div class="form-group">
@@ -188,7 +194,7 @@
                         <input
                             name="biaya_perjalanan_terbilang"
                             value="{{ data.biaya_perjalanan_terbilang }}"
-                            placeholder="Contoh: Lima Juta Rupiah">
+                            placeholder="Contoh: Dua Ratus Tiga Puluh Lima Ribu Rupiah">
                     </div>
 
                     <div class="form-group">
@@ -235,10 +241,11 @@
 
             </div>
 
-            <!-- RINCIAN BIAYA -->
+            <!-- RINCIAN -->
             <div class="section-box">
 
                 <div class="section-title with-button">
+
                     <div>
                         <span>05</span>
                         <h3>Rincian Biaya Perjalanan Dinas</h3>
@@ -250,6 +257,7 @@
                         onclick="addItem()">
                         + Tambah Rincian
                     </button>
+
                 </div>
 
                 <div id="items" class="items-wrapper">
@@ -281,7 +289,7 @@
                                 <input
                                     name="rincian_keterangan[]"
                                     placeholder="Keterangan"
-                                    value="{{ i.keterangan }}">
+                                    value="{{ i.keterangan if i.keterangan else 'Biaya Riil Perjalanan Dinas' }}">
                             </div>
 
                         </div>
@@ -305,35 +313,35 @@
                 <div class="form-grid">
 
                     <div class="form-group">
-                        <label>Tempat TTD</label>
+                        <label>Tempat TTD Pegawai</label>
                         <input
                             name="ttd_tempat"
                             value="{{ data.ttd_tempat }}"
-                            placeholder="Tempat tanda tangan">
+                            placeholder="Tempat tanda tangan pegawai">
                     </div>
 
                     <div class="form-group">
-                        <label>Tanggal TTD</label>
+                        <label>Tanggal TTD Pegawai</label>
                         <input
                             name="ttd_tanggal"
                             value="{{ data.ttd_tanggal }}"
-                            placeholder="Tanggal tanda tangan">
+                            placeholder="Contoh: 4 April 2026">
                     </div>
 
                     <div class="form-group">
-                        <label>Nama TTD</label>
+                        <label>Nama TTD Pegawai</label>
                         <input
                             name="ttd_nama"
                             value="{{ data.ttd_nama }}"
-                            placeholder="Nama penandatangan">
+                            placeholder="Nama penandatangan pegawai">
                     </div>
 
                     <div class="form-group">
-                        <label>NIP TTD</label>
+                        <label>NIP TTD Pegawai</label>
                         <input
                             name="ttd_nip"
                             value="{{ data.ttd_nip }}"
-                            placeholder="NIP penandatangan">
+                            placeholder="NIP penandatangan pegawai">
                     </div>
 
                     <div class="form-group">
@@ -342,6 +350,15 @@
                             name="penerima_nama"
                             value="{{ data.penerima_nama }}"
                             placeholder="Nama penerima">
+                    </div>
+
+                    <!-- KOLOM BARU -->
+                    <div class="form-group">
+                        <label>Tanggal Yang Menerima</label>
+                        <input
+                            name="penerima_tanggal"
+                            value="{{ data.penerima_tanggal if data.penerima_tanggal else '' }}"
+                            placeholder="Contoh: 5 April 2026">
                     </div>
 
                 </div>
@@ -413,260 +430,270 @@
 <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
 
 <script>
+
     CKEDITOR.replace('editor', {
-        height: 220,
+        height: 260,
         removeButtons: 'Subscript,Superscript,Anchor,Specialchar'
     });
+
 </script>
 
 <script>
+
     function addItem() {
+
         document.getElementById('items').insertAdjacentHTML('beforeend', `
+
             <div class="item-card">
+
                 <div class="form-grid rincian-grid">
+
                     <div class="form-group">
                         <label>Uraian</label>
-                        <input name="rincian_uraian[]" placeholder="Uraian">
+                        <input
+                            name="rincian_uraian[]"
+                            placeholder="Uraian">
                     </div>
 
                     <div class="form-group">
                         <label>Jumlah Biaya</label>
-                        <input name="rincian_jumlah[]" placeholder="Jumlah biaya">
+                        <input
+                            name="rincian_jumlah[]"
+                            placeholder="Jumlah biaya">
                     </div>
 
                     <div class="form-group">
                         <label>Keterangan</label>
-                        <input name="rincian_keterangan[]" placeholder="Keterangan">
+                        <input
+                            name="rincian_keterangan[]"
+                            value="Biaya Riil Perjalanan Dinas">
                     </div>
+
                 </div>
+
             </div>
+
         `);
+
     }
+
 </script>
 
 <style>
-    .sptjm-page {
-        width: 100%;
+
+.sptjm-page{
+    width:100%;
+}
+
+.form-card{
+    background:#ffffff;
+    border-radius:24px;
+    padding:34px;
+    box-shadow:0 14px 40px rgba(15,23,42,.08);
+    border:1px solid #e5eaf3;
+}
+
+.form-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:24px;
+    margin-bottom:28px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.badge-title{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#eaf3ff;
+    color:#0b55d9;
+    font-weight:800;
+    padding:9px 14px;
+    border-radius:999px;
+    font-size:14px;
+    margin-bottom:14px;
+}
+
+.form-header h2{
+    font-size:32px;
+    color:#0f172a;
+    margin-bottom:8px;
+}
+
+.form-header p{
+    color:#64748b;
+    font-size:15px;
+}
+
+.section-box{
+    background:#f8fbff;
+    border:1px solid #e5edf8;
+    border-radius:22px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.section-title span{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#0b55d9,#2f80ff);
+    color:white;
+    display:grid;
+    place-items:center;
+    font-weight:800;
+    font-size:14px;
+}
+
+.section-title h3{
+    font-size:20px;
+}
+
+.section-title.with-button{
+    justify-content:space-between;
+}
+
+.section-title.with-button > div{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.rincian-grid{
+    grid-template-columns:1.2fr 1fr 1fr;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.form-group.full{
+    margin-top:18px;
+}
+
+.form-group label{
+    font-size:14px;
+    font-weight:800;
+    color:#1e293b;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    border:1px solid #d9e2ef;
+    border-radius:14px;
+    background:white;
+    padding:14px 16px;
+    font-size:15px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none;
+    border-color:#0b55d9;
+    box-shadow:0 0 0 4px rgba(11,85,217,.12);
+}
+
+textarea{
+    min-height:220px;
+}
+
+.items-wrapper{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.item-card{
+    background:white;
+    border:1px solid #e5eaf3;
+    border-radius:18px;
+    padding:18px;
+}
+
+.btn-add{
+    border:none;
+    background:#eef4ff;
+    color:#0b55d9;
+    padding:11px 16px;
+    border-radius:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.btn-add:hover{
+    background:#0b55d9;
+    color:white;
+}
+
+.form-action{
+    display:flex;
+    justify-content:flex-end;
+}
+
+.btn-submit{
+    border:none;
+    background:linear-gradient(135deg,#0b55d9,#2f80ff);
+    color:white;
+    padding:15px 28px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.btn-submit:hover{
+    transform:translateY(-2px);
+}
+
+@media(max-width:1000px){
+
+    .form-grid,
+    .rincian-grid{
+        grid-template-columns:1fr;
     }
 
-    .form-card {
-        background: #ffffff;
-        border-radius: 24px;
-        padding: 34px;
-        box-shadow: 0 14px 40px rgba(15, 23, 42, .08);
-        border: 1px solid #e5eaf3;
+    .form-card{
+        padding:24px;
     }
 
-    .form-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-bottom: 24px;
-        margin-bottom: 28px;
-        border-bottom: 1px solid #e5e7eb;
+    .form-header h2{
+        font-size:26px;
     }
 
-    .badge-title {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: #eaf3ff;
-        color: #0b55d9;
-        font-weight: 800;
-        padding: 9px 14px;
-        border-radius: 999px;
-        font-size: 14px;
-        margin-bottom: 14px;
+    .section-title.with-button{
+        align-items:flex-start;
+        flex-direction:column;
     }
 
-    .form-header h2 {
-        font-size: 32px;
-        color: #0f172a;
-        margin-bottom: 8px;
+    .form-action{
+        justify-content:stretch;
     }
 
-    .form-header p {
-        color: #64748b;
-        font-size: 15px;
+    .btn-submit{
+        width:100%;
     }
 
-    .section-box {
-        background: #f8fbff;
-        border: 1px solid #e5edf8;
-        border-radius: 22px;
-        padding: 24px;
-        margin-bottom: 24px;
-    }
+}
 
-    .section-title {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 22px;
-    }
-
-    .section-title span {
-        width: 38px;
-        height: 38px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #0b55d9, #2f80ff);
-        color: white;
-        display: grid;
-        place-items: center;
-        font-weight: 800;
-        font-size: 14px;
-        box-shadow: 0 8px 18px rgba(11, 85, 217, .25);
-    }
-
-    .section-title h3 {
-        font-size: 20px;
-        color: #0f172a;
-    }
-
-    .section-title.with-button {
-        justify-content: space-between;
-    }
-
-    .section-title.with-button > div {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
-    }
-
-    .rincian-grid {
-        grid-template-columns: 1.2fr 1fr 1fr;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .form-group.full {
-        margin-top: 18px;
-    }
-
-    .form-group label {
-        font-size: 14px;
-        font-weight: 800;
-        color: #1e293b;
-    }
-
-    input,
-    select,
-    textarea {
-        width: 100%;
-        border: 1px solid #d9e2ef;
-        border-radius: 14px;
-        background: white;
-        padding: 14px 16px;
-        font-size: 15px;
-        transition: .25s ease;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-        outline: none;
-        border-color: #0b55d9;
-        box-shadow: 0 0 0 4px rgba(11, 85, 217, .12);
-    }
-
-    textarea {
-        min-height: 220px;
-        resize: vertical;
-        line-height: 1.7;
-    }
-
-    .items-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .item-card {
-        background: white;
-        border: 1px solid #e5eaf3;
-        border-radius: 18px;
-        padding: 18px;
-        box-shadow: 0 8px 18px rgba(15, 23, 42, .04);
-    }
-
-    .btn-add {
-        border: none;
-        background: #eef4ff;
-        color: #0b55d9;
-        padding: 11px 16px;
-        border-radius: 12px;
-        font-weight: 800;
-        cursor: pointer;
-        transition: .25s ease;
-    }
-
-    .btn-add:hover {
-        background: #0b55d9;
-        color: white;
-        transform: translateY(-2px);
-    }
-
-    .form-action {
-        display: flex;
-        justify-content: flex-end;
-        padding-top: 12px;
-    }
-
-    .btn-submit {
-        border: none;
-        background: linear-gradient(135deg, #0b55d9, #2f80ff);
-        color: white;
-        padding: 15px 28px;
-        border-radius: 16px;
-        font-size: 16px;
-        font-weight: 800;
-        cursor: pointer;
-        box-shadow: 0 12px 26px rgba(11, 85, 217, .28);
-        transition: .25s ease;
-    }
-
-    .btn-submit:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 16px 34px rgba(11, 85, 217, .36);
-    }
-
-    @media(max-width: 1000px) {
-        .form-grid,
-        .rincian-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .form-card {
-            padding: 24px;
-        }
-
-        .form-header h2 {
-            font-size: 26px;
-        }
-
-        .section-title.with-button {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .form-action {
-            justify-content: stretch;
-        }
-
-        .btn-submit {
-            width: 100%;
-        }
-    }
 </style>
 
 {% endblock %}
