@@ -32,13 +32,11 @@ app.secret_key = 'ganti_secret_key_ini'
 # ======================================================
 
 DB_CONFIG = {
-    'host': os.getenv('MYSQLHOST'),
-    'port': int(os.getenv('MYSQLPORT', 3306)),
-    'user': os.getenv('MYSQLUSER'),
-    'password': os.getenv('MYSQLPASSWORD'),
-    'database': os.getenv('MYSQLDATABASE')
+    'host': 'localhost',
+    'user': 'root',
+    'password': '',
+    'database': 'db_surat_rutan'
 }
-
 
 # ======================================================
 # JENIS SURAT
@@ -110,6 +108,10 @@ def default_data(jenis):
         # UMUM
         'nama': '',
         'nip': '',
+
+        # FIX INI WAJIB
+        'pangkat_gol': '',
+
         'jabatan': '',
         'unit_organisasi': '',
 
@@ -174,10 +176,13 @@ def default_data(jenis):
             'telah_dibayarkan': '',
             'telah_dibayarkan_terbilang': '',
 
-            'bendahara_nama': 'Imal Pratama Tarigan',
+            'bendahara_nama': 'Inal Pratama Tarigan',
             'bendahara_nip': '199702172017121002',
 
             'penerima_nama': '',
+
+             # FIX BARU
+             'penerima_tanggal': '',
 
             'ditetapkan': '0',
             'dibayarkan_semula': '0',
@@ -194,20 +199,52 @@ def default_data(jenis):
 
     elif jenis == 'laporan_kegiatan':
 
-        base.update({
+         base.update({
 
-            'nomor_dipa': '',
-            'tanggal_dipa': '',
-            'tempat': '',
-            'uraian_kegiatan': '',
-            'hasil_tindak_lanjut': '',
+        # ==========================================
+        # DATA DIPA
+        # ==========================================
 
-            'petugas': [],
+        'nomor_dipa': '',
+        'tanggal_dipa': '',
 
-            'pelaksana_nama': '',
-            'pelaksana_nip': ''
+        # ==========================================
+        # TEMPAT
+        # ==========================================
 
-        })
+        'tempat': '',
+
+        # ==========================================
+        # ISI LAPORAN
+        # ==========================================
+
+        'uraian_kegiatan': '',
+        'hasil_tindak_lanjut': '',
+
+        # ==========================================
+        # PETUGAS
+        # ==========================================
+
+        'petugas': [],
+
+        # ==========================================
+        # PELAKSANA SPD
+        # ==========================================
+
+        'pelaksana_nama': '',
+        'pelaksana_nip': '',
+
+        # ==========================================
+        # FIX TTD BARU KIRI KANAN
+        # ==========================================
+
+        'ttd_kiri_nama': '',
+        'ttd_kiri_jabatan': '',
+
+        'ttd_kanan_nama': '',
+        'ttd_kanan_jabatan': ''
+
+    })
 
     # ==================================================
     # NOTA DINAS
