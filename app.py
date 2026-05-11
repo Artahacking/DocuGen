@@ -39,6 +39,7 @@ DB_CONFIG = {
     'database': os.getenv('MYSQLDATABASE')
 }
 
+
 # ======================================================
 # JENIS SURAT
 # ======================================================
@@ -321,23 +322,42 @@ def parse_form(jenis):
     data = default_data(jenis)
 
     # ==================================================
-    # AMBIL SEMUA INPUT BIASA
+    # AMBIL INPUT NORMAL
     # ==================================================
 
     for k in data.keys():
 
-        if k not in ['rincian', 'petugas', 'pengeluaran']:
+        # SKIP ARRAY
+        if k in [
+            'rincian',
+            'petugas',
+            'pengeluaran'
+        ]:
+            continue
 
-            data[k] = request.form.get(k, data[k])
+        # ==============================================
+        # FIX KHUSUS RICH TEXT EDITOR
+        # ==============================================
 
-    # ==================================================
-    # FIX ISI NOTA DINAS
-    # ==================================================
+        if k == 'isi_pernyataan':
 
-    data['isi_pernyataan'] = request.form.get(
-        'isi_pernyataan',
-        ''
-    )
+            isi_html = request.form.get(
+                'isi_pernyataan',
+                ''
+            )
+
+            # FIX QUILL KOSONG
+            if isi_html == '<p><br></p>':
+                isi_html = ''
+
+            data['isi_pernyataan'] = isi_html
+
+        else:
+
+            data[k] = request.form.get(
+                k,
+                data[k]
+            )
 
     # ==================================================
     # SPTJM
@@ -345,9 +365,17 @@ def parse_form(jenis):
 
     if jenis == 'sptjm':
 
-        uraian = request.form.getlist('rincian_uraian[]')
-        jumlah = request.form.getlist('rincian_jumlah[]')
-        ket = request.form.getlist('rincian_keterangan[]')
+        uraian = request.form.getlist(
+            'rincian_uraian[]'
+        )
+
+        jumlah = request.form.getlist(
+            'rincian_jumlah[]'
+        )
+
+        ket = request.form.getlist(
+            'rincian_keterangan[]'
+        )
 
         data['rincian'] = [
 
@@ -357,7 +385,11 @@ def parse_form(jenis):
                 'keterangan': k
             }
 
-            for u, j, k in zip(uraian, jumlah, ket)
+            for u, j, k in zip(
+                uraian,
+                jumlah,
+                ket
+            )
 
             if u or j or k
 
@@ -367,12 +399,23 @@ def parse_form(jenis):
     # LAPORAN KEGIATAN
     # ==================================================
 
-    if jenis == 'laporan_kegiatan':
+    elif jenis == 'laporan_kegiatan':
 
-        nama = request.form.getlist('petugas_nama[]')
-        nip = request.form.getlist('petugas_nip[]')
-        pangkat = request.form.getlist('petugas_pangkat_gol[]')
-        jabatan = request.form.getlist('petugas_jabatan[]')
+        nama = request.form.getlist(
+            'petugas_nama[]'
+        )
+
+        nip = request.form.getlist(
+            'petugas_nip[]'
+        )
+
+        pangkat = request.form.getlist(
+            'petugas_pangkat_gol[]'
+        )
+
+        jabatan = request.form.getlist(
+            'petugas_jabatan[]'
+        )
 
         data['petugas'] = [
 
@@ -398,10 +441,15 @@ def parse_form(jenis):
     # DAFTAR PENGELUARAN RILL
     # ==================================================
 
-    if jenis == 'daftar_pengeluaran_rill':
+    elif jenis == 'daftar_pengeluaran_rill':
 
-        uraian = request.form.getlist('pengeluaran_uraian[]')
-        jumlah = request.form.getlist('pengeluaran_jumlah[]')
+        uraian = request.form.getlist(
+            'pengeluaran_uraian[]'
+        )
+
+        jumlah = request.form.getlist(
+            'pengeluaran_jumlah[]'
+        )
 
         data['pengeluaran'] = [
 
@@ -410,7 +458,10 @@ def parse_form(jenis):
                 'jumlah': j
             }
 
-            for u, j in zip(uraian, jumlah)
+            for u, j in zip(
+                uraian,
+                jumlah
+            )
 
             if u or j
 
