@@ -77,12 +77,15 @@
                         Jl. Stasiun No.09 Pangkalan Brandan, Kec. Babalan, Sumatera Utara
                     </div>
 
-                    <div clas="k1">
-                        Laman : rutanpangkalanbrandan.kemenkumham.go.id 
+                    <div class="k1">
+                        Laman : rutanpangkalanbrandan.kemenkumham.go.id
                     </div>
 
-                    <div class= "k1"> 
-                        Pos-el : rtn.pangkalanbrandan@kemenkumham.go.id
+                    <div class="k1">
+                        Pos-el :
+                        <span style="color:#0b55d9;font-weight:bold;">
+                            rtn.pangkalanbrandan@kemenkumham.go.id
+                        </span>
                     </div>
 
                 </div>
@@ -170,46 +173,12 @@
         <div class="line-divider"></div>
 
         <!-- ======================= -->
-        <!-- ISI SURAT -->
+        <!-- ISI SURAT DARI QUILL -->
         <!-- ======================= -->
 
-        <div class="isi-surat">
+        <div class="isi-surat quill-content">
 
-            <p>
-
-                Sehubungan dengan telah dilaksanakannya Perjalanan Dinas
-                sesuai Surat Tugas Nomor
-                <b>{{ data.nomor_tugas }}</b>
-                pada tanggal
-                <b>{{ data.tanggal_tugas }}</b>
-                tentang
-                <b>{{ data.kegiatan }}</b>.
-
-            </p>
-
-            <p>
-
-                Bersama ini kami sampaikan pengajuan pembayaran perjalanan
-                dinas rincian output EBD.955 layanan manajemen keuangan
-                sebesar Rp.
-                <b>{{ data.nominal }}</b>
-                dan telah dilaksanakannya dokumen pertanggungjawaban terkait
-                perjalanan dinas tersebut sebagaimana terlampir.
-
-            </p>
-
-            <p>
-
-                Mohon kiranya persetujuan untuk pembayaran kegiatan ini.
-
-            </p>
-
-            <p>
-
-                Demikian disampaikan, atas perhatian dan kehadirannya
-                diucapkan terima kasih.
-
-            </p>
+            {{ data.isi_pernyataan|safe }}
 
         </div>
 
@@ -234,7 +203,7 @@
                 <div class="sign-space"></div>
 
                 <div class="ttd-nama">
-                    <u>{{ data.ttd_nama }}</u>
+                    {{ data.ttd_nama }}
                 </div>
 
                 <div class="ttd-nip">
@@ -434,12 +403,63 @@
     .isi-surat{
         font-size:20px;
         text-align:justify;
+        line-height:1.9;
     }
 
-    .isi-surat p{
+    .quill-content{
+        width:100%;
+        overflow:hidden;
+    }
+
+    .quill-content p{
         margin-bottom:20px;
         text-indent:50px;
         line-height:1.9;
+    }
+
+    .quill-content ol,
+    .quill-content ul{
+        margin-left:60px;
+        margin-bottom:20px;
+    }
+
+    .quill-content strong{
+        font-weight:bold;
+    }
+
+    .quill-content em{
+        font-style:italic;
+    }
+
+    .quill-content u{
+        text-decoration:underline;
+    }
+
+    .quill-content blockquote{
+
+        border-left:5px solid #999;
+
+        padding-left:18px;
+
+        margin-left:20px;
+
+        color:#444;
+
+        font-style:italic;
+    }
+
+    .quill-content h1,
+    .quill-content h2,
+    .quill-content h3{
+
+        margin-top:20px;
+        margin-bottom:20px;
+        font-weight:bold;
+    }
+
+    .quill-content *{
+        max-width:100%;
+        word-wrap:break-word;
     }
 
     /* ======================= */
