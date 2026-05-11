@@ -1,1 +1,326 @@
-{% extends 'base.html' %}{% block body %}<div class="preview-wrap"><div class="toolbar no-print"><b>Preview Nota Dinas</b><div><a class="btn btn-light" href="{{url_for('surat_edit',id=surat.id)}}">Edit</a><a class="btn btn-light" href="{{url_for('arsip')}}">Arsip</a><a class="btn btn-light" href="{{url_for('surat_pdf',id=surat.id)}}">Download PDF</a><button class="btn btn-light" onclick="window.print()">Print</button></div></div><div class="paper"><h2 class="center">SURAT PERNYATAAN</h2><p>Saya yang bertanda tangan di bawah ini :</p><div class="row-line"><span>Nama</span><span>:</span><span>{{data.nama}}</span></div><div class="row-line"><span>NIP</span><span>:</span><span>{{data.nip}}</span></div><div class="row-line"><span>Jabatan</span><span>:</span><span>{{data.jabatan}}</span></div><div class="row-line"><span>Unit Organisasi</span><span>:</span><span>{{data.unit_organisasi}}</span></div><p style="text-align:justify;white-space:pre-line;text-indent:45px">{{data.isi_pernyataan}}</p><div class="ttd"><div>Mengetahui/Menyetujui<div class="sign-space"></div>( {{data.menyetujui_nama}} )</div><div>{{data.ttd_tempat}}, {{data.ttd_tanggal}}<div class="sign-space"></div>( {{data.ttd_nama}} )</div></div></div></div>{% endblock %}
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="preview-wrap">
+
+    <!-- TOOLBAR -->
+    <div class="toolbar no-print">
+
+        <b>Preview Surat Pernyataan</b>
+
+        <div>
+
+            <a class="btn btn-light"
+               href="{{ url_for('surat_edit', id=surat.id) }}">
+                Edit
+            </a>
+
+            <a class="btn btn-light"
+               href="{{ url_for('arsip') }}">
+                Arsip
+            </a>
+
+            <a class="btn btn-light"
+               href="{{ url_for('surat_pdf', id=surat.id) }}">
+                Download PDF
+            </a>
+
+            <button class="btn btn-light"
+                    onclick="window.print()">
+                Print
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- PAPER -->
+    <div class="paper">
+
+        <!-- JUDUL -->
+        <h2 class="doc-title">
+            SURAT PERNYATAAN
+        </h2>
+
+        <!-- PEMBUKA -->
+        <p class="intro">
+            Saya yang bertanda tangan di bawah ini :
+        </p>
+
+        <!-- DATA -->
+        <div class="row-line">
+            <span>Nama</span>
+            <span>:</span>
+            <span>{{ data.nama }}</span>
+        </div>
+
+        <div class="row-line">
+            <span>NIP</span>
+            <span>:</span>
+            <span>{{ data.nip }}</span>
+        </div>
+
+        <div class="row-line">
+            <span>Jabatan</span>
+            <span>:</span>
+            <span>{{ data.jabatan }}</span>
+        </div>
+
+        <div class="row-line">
+            <span>Unit Organisasi</span>
+            <span>:</span>
+            <span>{{ data.unit_organisasi }}</span>
+        </div>
+
+        <!-- ISI SURAT -->
+        <div class="isi-surat">
+
+            {{ data.isi_pernyataan|safe }}
+
+        </div>
+
+        <!-- TTD -->
+        <div class="ttd-wrap">
+
+            <!-- KIRI -->
+            <div class="ttd-box left">
+
+                <div class="ttd-title">
+                    Mengetahui/Menyetujui
+                </div>
+
+                <div class="sign-space"></div>
+
+                <div class="ttd-name">
+                    ( {{ data.menyetujui_nama }} )
+                </div>
+
+            </div>
+
+            <!-- KANAN -->
+            <div class="ttd-box right">
+
+                <div class="ttd-title">
+                    {{ data.ttd_tempat }},
+                    {{ data.ttd_tanggal }}
+                </div>
+
+                <div class="sign-space"></div>
+
+                <div class="ttd-name">
+                    ( {{ data.ttd_nama }} )
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+/* =============================== */
+/* WRAP */
+/* =============================== */
+
+.preview-wrap{
+    background:#555;
+    padding:30px;
+    min-height:100vh;
+}
+
+/* =============================== */
+/* TOOLBAR */
+/* =============================== */
+
+.toolbar{
+    background:#0b55d9;
+    color:white;
+
+    padding:15px 20px;
+
+    border-radius:12px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.btn{
+    padding:10px 16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.btn-light{
+    background:white;
+    color:#0b55d9;
+}
+
+/* =============================== */
+/* PAPER */
+/* =============================== */
+
+.paper{
+    width:850px;
+    min-height:1120px;
+
+    background:white;
+
+    margin:auto;
+
+    padding:70px;
+
+    font-family:"Times New Roman", serif;
+
+    box-shadow:0 0 20px rgba(0,0,0,.2);
+}
+
+/* =============================== */
+/* TITLE */
+/* =============================== */
+
+.doc-title{
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    margin-bottom:50px;
+}
+
+/* =============================== */
+/* INTRO */
+/* =============================== */
+
+.intro{
+    margin-bottom:25px;
+    font-size:18px;
+}
+
+/* =============================== */
+/* DATA */
+/* =============================== */
+
+.row-line{
+    display:grid;
+    grid-template-columns:130px 20px 1fr;
+
+    margin-bottom:10px;
+
+    font-size:18px;
+}
+
+/* =============================== */
+/* ISI */
+/* =============================== */
+
+.isi-surat{
+    margin-top:30px;
+
+    text-align:justify;
+
+    line-height:1.9;
+
+    font-size:18px;
+}
+
+/* HAPUS STYLE HTML MENTAH */
+.isi-surat p{
+    margin:0 0 18px 0;
+    text-indent:45px;
+}
+
+/* QUILL */
+.isi-surat ul,
+.isi-surat ol{
+    margin-left:40px;
+    margin-bottom:20px;
+}
+
+.isi-surat strong{
+    font-weight:bold;
+}
+
+.isi-surat em{
+    font-style:italic;
+}
+
+.isi-surat u{
+    text-decoration:underline;
+}
+
+/* =============================== */
+/* TTD */
+/* =============================== */
+
+.ttd-wrap{
+    margin-top:70px;
+
+    display:flex;
+    justify-content:space-between;
+}
+
+/* BOX */
+.ttd-box{
+    width:40%;
+}
+
+/* LEFT */
+.ttd-box.left{
+    text-align:center;
+}
+
+/* RIGHT */
+.ttd-box.right{
+    text-align:center;
+}
+
+/* TITLE */
+.ttd-title{
+    font-size:18px;
+}
+
+/* SPACE */
+.sign-space{
+    height:100px;
+}
+
+/* NAME */
+.ttd-name{
+    font-size:18px;
+}
+
+/* =============================== */
+/* PRINT */
+/* =============================== */
+
+@media print{
+
+    .toolbar,
+    .no-print{
+        display:none !important;
+    }
+
+    .preview-wrap{
+        background:white;
+        padding:0;
+    }
+
+    .paper{
+        width:100%;
+        box-shadow:none;
+        margin:0;
+    }
+
+}
+
+</style>
+
+{% endblock %}
