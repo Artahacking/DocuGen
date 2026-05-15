@@ -6,7 +6,6 @@
 
     <div class="rill-card">
 
-        <!-- HEADER -->
         <div class="rill-header">
 
             <div class="header-content">
@@ -35,12 +34,7 @@
 
         </div>
 
-        <!-- FORM -->
         <form method="post">
-
-            <!-- ======================= -->
-            <!-- INFORMASI ARSIP -->
-            <!-- ======================= -->
 
             <div class="glass-box">
 
@@ -78,7 +72,7 @@
                         <select name="status">
 
                             <option value="Selesai"
-                                {% if surat and surat.status=='Selesai' %}
+                                {% if surat and surat.status == 'Selesai' %}
                                     selected
                                 {% endif %}
                             >
@@ -86,7 +80,7 @@
                             </option>
 
                             <option value="Draft"
-                                {% if surat and surat.status=='Draft' %}
+                                {% if surat and surat.status == 'Draft' %}
                                     selected
                                 {% endif %}
                             >
@@ -100,10 +94,6 @@
                 </div>
 
             </div>
-
-            <!-- ======================= -->
-            <!-- DATA PEGAWAI -->
-            <!-- ======================= -->
 
             <div class="glass-box">
 
@@ -177,10 +167,6 @@
 
             </div>
 
-            <!-- ======================= -->
-            <!-- INFORMASI TANGGAL -->
-            <!-- ======================= -->
-
             <div class="glass-box">
 
                 <div class="box-title">
@@ -237,10 +223,6 @@
                 </div>
 
             </div>
-
-            <!-- ======================= -->
-            <!-- PEJABAT -->
-            <!-- ======================= -->
 
             <div class="glass-box">
 
@@ -311,10 +293,6 @@
 
             </div>
 
-            <!-- ======================= -->
-            <!-- PENGELUARAN -->
-            <!-- ======================= -->
-
             <div class="glass-box">
 
                 <div class="box-title between">
@@ -326,13 +304,8 @@
                         </div>
 
                         <div>
-
                             <h3>Rincian Pengeluaran</h3>
-
-                            <p>
-                                Tambahkan seluruh pengeluaran perjalanan dinas
-                            </p>
-
+                            <p>Tambahkan seluruh pengeluaran perjalanan dinas</p>
                         </div>
 
                     </div>
@@ -341,16 +314,12 @@
                         type="button"
                         class="btn-add"
                         onclick="addR()">
-
                         + Tambah Pengeluaran
-
                     </button>
 
                 </div>
 
-                <div
-                    id="pengeluaran"
-                    class="pengeluaran-list">
+                <div id="pengeluaran" class="pengeluaran-list">
 
                     {% for p in data.pengeluaran %}
 
@@ -392,13 +361,10 @@
 
             </div>
 
-            <!-- BUTTON -->
             <div class="submit-wrap">
 
-                <button class="btn-submit">
-
+                <button type="submit" class="btn-submit">
                     💾 Simpan & Preview
-
                 </button>
 
             </div>
@@ -409,7 +375,6 @@
 
 </div>
 
-<!-- ADD PENGELUARAN -->
 <script>
 
 function addR(){
@@ -446,7 +411,7 @@ function addR(){
 
         </div>
 
-    `)
+    `);
 
 }
 
@@ -459,425 +424,251 @@ function addR(){
     }
 
     .rill-card{
-
-        background:
-        linear-gradient(
-            180deg,
-            #ffffff,
-            #f8fbff
-        );
-
+        background:linear-gradient(180deg,#ffffff,#f8fbff);
         border-radius:32px;
-
         padding:36px;
-
         border:1px solid #e5edf6;
-
-        box-shadow:
-        0 18px 45px rgba(15,23,42,.08);
-
+        box-shadow:0 18px 45px rgba(15,23,42,.08);
         position:relative;
-
         overflow:hidden;
     }
 
     .rill-card::before{
-
         content:'';
-
         position:absolute;
-
         top:-150px;
         right:-150px;
-
         width:320px;
         height:320px;
-
-        background:
-        radial-gradient(
-            circle,
-            rgba(59,130,246,.10),
-            transparent 70%
-        );
-
+        background:radial-gradient(circle,rgba(59,130,246,.10),transparent 70%);
         border-radius:50%;
     }
 
     .rill-header{
-
         position:relative;
-
         z-index:2;
-
         margin-bottom:34px;
     }
 
     .header-content{
-
         display:flex;
-
         align-items:center;
-
         gap:22px;
     }
 
     .header-icon{
-
         width:84px;
         height:84px;
-
         border-radius:24px;
-
-        background:
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #2563eb
-        );
-
+        background:linear-gradient(135deg,#0f172a,#2563eb);
         display:grid;
         place-items:center;
-
         font-size:38px;
-
         color:white;
-
-        box-shadow:
-        0 16px 35px rgba(37,99,235,.22);
+        box-shadow:0 16px 35px rgba(37,99,235,.22);
     }
 
     .top-label{
-
         display:inline-block;
-
         background:#dbeafe;
-
         color:#1d4ed8;
-
         padding:8px 14px;
-
         border-radius:999px;
-
         font-size:12px;
-
         font-weight:800;
-
         margin-bottom:14px;
-
         letter-spacing:.5px;
     }
 
     .rill-header h2{
-
         font-size:36px;
-
         color:#0f172a;
-
         margin-bottom:8px;
     }
 
     .rill-header p{
-
         color:#64748b;
-
         font-size:15px;
     }
 
     .glass-box{
-
-        background:
-        rgba(255,255,255,.75);
-
+        background:rgba(255,255,255,.75);
         backdrop-filter:blur(10px);
-
         border:1px solid rgba(255,255,255,.55);
-
         border-radius:26px;
-
         padding:26px;
-
         margin-bottom:28px;
-
-        box-shadow:
-        0 10px 25px rgba(15,23,42,.05);
+        box-shadow:0 10px 25px rgba(15,23,42,.05);
     }
 
     .box-title{
-
         display:flex;
-
         align-items:center;
-
         gap:18px;
-
         margin-bottom:24px;
     }
 
     .between{
-
         justify-content:space-between;
     }
 
     .title-flex{
-
         display:flex;
-
         align-items:center;
-
         gap:18px;
     }
 
     .number-box{
-
         width:46px;
         height:46px;
-
         border-radius:14px;
-
-        background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #60a5fa
-        );
-
+        background:linear-gradient(135deg,#2563eb,#60a5fa);
         color:white;
-
         display:grid;
         place-items:center;
-
         font-size:15px;
-
         font-weight:800;
-
-        box-shadow:
-        0 10px 22px rgba(37,99,235,.25);
+        box-shadow:0 10px 22px rgba(37,99,235,.25);
     }
 
     .box-title h3{
-
         font-size:22px;
-
         color:#0f172a;
-
         margin-bottom:5px;
     }
 
     .box-title p{
-
         color:#64748b;
-
         font-size:14px;
     }
 
     .form-grid{
-
         display:grid;
-
-        grid-template-columns:
-        repeat(2,1fr);
-
+        grid-template-columns:repeat(2,1fr);
         gap:20px;
     }
 
     .pengeluaran-grid{
-
-        grid-template-columns:
-        1.4fr 1fr;
+        grid-template-columns:1.4fr 1fr;
     }
 
     .form-group{
-
         display:flex;
-
         flex-direction:column;
-
         gap:8px;
     }
 
     .form-group label{
-
         font-size:14px;
-
         font-weight:700;
-
         color:#1e293b;
     }
 
     input,
     select{
-
         width:100%;
-
         padding:15px 16px;
-
         border-radius:16px;
-
         border:1px solid #d8e3f0;
-
         background:white;
-
         font-size:15px;
-
         transition:.25s ease;
     }
 
     input:focus,
     select:focus{
-
         outline:none;
-
         border-color:#2563eb;
-
-        box-shadow:
-        0 0 0 4px rgba(37,99,235,.10);
+        box-shadow:0 0 0 4px rgba(37,99,235,.10);
     }
 
     .btn-add{
-
         border:none;
-
-        background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #3b82f6
-        );
-
+        background:linear-gradient(135deg,#2563eb,#3b82f6);
         color:white;
-
         padding:13px 18px;
-
         border-radius:14px;
-
         font-size:14px;
         font-weight:700;
-
         cursor:pointer;
-
         transition:.25s ease;
-
-        box-shadow:
-        0 10px 20px rgba(37,99,235,.22);
+        box-shadow:0 10px 20px rgba(37,99,235,.22);
     }
 
     .btn-add:hover{
-
         transform:translateY(-2px);
-
-        box-shadow:
-        0 15px 28px rgba(37,99,235,.28);
+        box-shadow:0 15px 28px rgba(37,99,235,.28);
     }
 
     .pengeluaran-list{
-
         display:flex;
-
         flex-direction:column;
-
         gap:18px;
     }
 
     .pengeluaran-card{
-
         background:white;
-
         border:1px solid #e5edf6;
-
         border-radius:20px;
-
         padding:20px;
-
-        box-shadow:
-        0 8px 18px rgba(15,23,42,.04);
+        box-shadow:0 8px 18px rgba(15,23,42,.04);
     }
 
     .submit-wrap{
-
         display:flex;
-
         justify-content:flex-end;
-
         margin-top:10px;
     }
 
     .btn-submit{
-
         border:none;
-
-        background:
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #2563eb
-        );
-
+        background:linear-gradient(135deg,#0f172a,#2563eb);
         color:white;
-
         padding:17px 30px;
-
         border-radius:18px;
-
         font-size:16px;
         font-weight:800;
-
         cursor:pointer;
-
         transition:.25s ease;
-
-        box-shadow:
-        0 16px 32px rgba(15,23,42,.20);
+        box-shadow:0 16px 32px rgba(15,23,42,.20);
     }
 
     .btn-submit:hover{
-
         transform:translateY(-3px);
-
-        box-shadow:
-        0 20px 38px rgba(15,23,42,.26);
+        box-shadow:0 20px 38px rgba(15,23,42,.26);
     }
 
     @media(max-width:1000px){
 
         .form-grid,
         .pengeluaran-grid{
-
             grid-template-columns:1fr;
         }
 
         .rill-card{
-
             padding:24px;
         }
 
         .header-content{
-
             flex-direction:column;
-
             align-items:flex-start;
         }
 
         .rill-header h2{
-
             font-size:30px;
         }
 
         .between{
-
             flex-direction:column;
-
             align-items:flex-start;
-
             gap:18px;
         }
 
         .submit-wrap{
-
             justify-content:stretch;
         }
 
         .btn-submit{
-
             width:100%;
         }
 
