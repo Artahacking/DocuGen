@@ -39,7 +39,6 @@ DB_CONFIG = {
     'database': os.getenv('MYSQLDATABASE')
 }
 
-
 # ======================================================
 # JENIS SURAT
 # ======================================================
@@ -140,6 +139,10 @@ def default_data(jenis):
         # MENGETAHUI
         'menyetujui_nama': '',
         'menyetujui_nip': '',
+        
+        # KHUSUS DAFTAR PENGELUARAN RILL
+        'mengetahui_nama': '',
+        'mengetahui_nip': '',
 
         # KETERANGAN
         'keterangan': ''
@@ -297,22 +300,25 @@ def default_data(jenis):
 
         base.update({
 
-            'pengeluaran': [
+        'pengeluaran': [
 
-                {
-                    'uraian': 'Uang Harian',
-                    'jumlah': ''
-                }
+            {
+                'uraian': 'Uang Harian',
+                'jumlah': ''
+            }
 
-            ],
+        ],
 
-            'ppk_nama': '',
-            'ppk_nip': ''
+        # PPK / MENGETAHUI
+        'mengetahui_nama': '',
+        'mengetahui_nip': '',
 
-        })
+        # BACKUP FIELD LAMA
+        'ppk_nama': '',
+        'ppk_nip': ''
 
+    })
     return base
-
 # ======================================================
 # PARSE FORM
 # ======================================================
@@ -1033,6 +1039,108 @@ def pengaturan():
         user=user
 
     )
+    
+    # ======================================================
+# CATATAN NO SURAT
+# ======================================================
+
+@app.route('/no-surat', methods=['GET', 'POST'])
+@login_required
+def no_surat():
+
+    con = db()
+    cur = con.cursor(dictionary=True)
+
+    if request.method == 'POST':
+
+        no_surat = request.form.get('no_surat', '').strip()
+        keterangan = request.form.get('keterangan', '').strip()
+
+        if not no_surat:
+            flash('No surat wajib diisi')
+            return redirect(url_for('no_surat'))
+
+        cur.execute(
+            '''
+            INSERT INTO catatan_no_surat
+            (
+                no_surat,
+                keterangan
+            )
+            VALUES
+            (%s, %s)
+            ''',
+            (
+                no_surat,
+                keterangan
+            )
+        )
+
+        con.commit()
+
+        flash('Catatan no surat berhasil ditambahkan')
+
+        cur.close()
+        con.close()
+
+        return redirect(url_for('no_surat'))
+
+    q = request.args.get('q', '').strip()
+
+    sql = 'SELECT * FROM catatan_no_surat WHERE 1=1'
+    params = []
+
+    if q:
+        sql += '''
+            AND
+            (
+                no_surat LIKE %s
+                OR keterangan LIKE %s
+            )
+        '''
+
+        params += [
+            f'%{q}%',
+            f'%{q}%'
+        ]
+
+    sql += ' ORDER BY id DESC'
+
+    cur.execute(sql, params)
+
+    rows = cur.fetchall()
+
+    cur.close()
+    con.close()
+
+    return render_template(
+        'no_surat.html',
+        rows=rows,
+        q=q,
+        user=current_user()
+    )
+
+
+@app.route('/no-surat/<int:id>/delete', methods=['POST'])
+@login_required
+def no_surat_delete(id):
+
+    con = db()
+    cur = con.cursor()
+
+    cur.execute(
+        'DELETE FROM catatan_no_surat WHERE id=%s',
+        (id,)
+    )
+
+    con.commit()
+
+    cur.close()
+    con.close()
+
+    flash('Catatan no surat berhasil dihapus')
+
+    return redirect(url_for('no_surat'))
 
 # ======================================================
 # FILTER RUPIAH
