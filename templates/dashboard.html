@@ -1,1 +1,152 @@
-{% extends 'base.html' %}{% block content %}<div class="cards"><div class="stat"><div class="ico blue">📄</div><div><h2>{{total}}</h2><b>Total Laporan</b><br><small>Semua laporan</small></div></div><div class="stat"><div class="ico green">✅</div><div><h2>{{selesai}}</h2><b>Selesai</b><br><small>Laporan selesai</small></div></div><div class="stat"><div class="ico orange">🕘</div><div><h2>{{draft}}</h2><b>Draft</b><br><small>Dalam proses</small></div></div><div class="stat"><div class="ico purple">📁</div><div><h2>5</h2><b>Template Tersedia</b><br><small>Jenis surat</small></div></div></div><div class="panel"><h2>Buat Surat Baru</h2><div class="grid"><div class="menu-card"><div style="font-size:42px">📘</div><h3>SPTJM</h3><p>Surat Pernyataan Tanggung Jawab Mutlak</p><a class="btn btn-blue" href="{{url_for('surat_new',jenis='sptjm')}}">Buat SPTJM</a></div><div class="menu-card"><div style="font-size:42px">📗</div><h3>Laporan</h3><p>Laporan Kegiatan</p><a class="btn btn-green" href="{{url_for('surat_new',jenis='laporan_kegiatan')}}">Buat Laporan</a></div><div class="menu-card"><div style="font-size:42px">📄</div><h3>Nota</h3><p>Nota Dinas</p><a class="btn btn-orange" href="{{url_for('surat_new',jenis='nota_dinas')}}">Buat Nota</a></div><div class="menu-card"><div style="font-size:42px">📑</div><h3>Pernyataan</h3><p>Surat Pernyataan</p><a class="btn btn-purple" href="{{url_for('surat_new',jenis='surat_pernyataan')}}">Buat Surat</a></div><div class="menu-card"><div style="font-size:42px">💰</div><h3>Rill</h3><p>Daftar Pengeluaran Rill</p><a class="btn btn-blue" href="{{url_for('surat_new',jenis='daftar_pengeluaran_rill')}}">Buat Rill</a></div></div></div><div class="panel"><h2>Laporan Terbaru</h2><table class="table"><tr><th>Jenis</th><th>Nama Laporan</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr>{% for r in latest %}<tr><td>{{jenis_surat[r.jenis]}}</td><td>{{r.judul}}</td><td>{{r.tanggal}}</td><td><span class="badge {{r.status|lower}}">{{r.status}}</span></td><td><a class="btn btn-light" href="{{url_for('surat_preview',id=r.id)}}">Preview</a></td></tr>{% endfor %}</table></div>{% endblock %}
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="cards">
+
+    <div class="stat">
+        <div class="ico blue">📄</div>
+        <div>
+            <h2>{{ total }}</h2>
+            <b>Total Laporan</b><br>
+            <small>Semua laporan</small>
+        </div>
+    </div>
+
+    <div class="stat">
+        <div class="ico green">✅</div>
+        <div>
+            <h2>{{ selesai }}</h2>
+            <b>Selesai</b><br>
+            <small>Laporan selesai</small>
+        </div>
+    </div>
+
+    <div class="stat">
+        <div class="ico orange">🕘</div>
+        <div>
+            <h2>{{ draft }}</h2>
+            <b>Draft</b><br>
+            <small>Dalam proses</small>
+        </div>
+    </div>
+
+    <div class="stat">
+        <div class="ico purple">📁</div>
+        <div>
+            <h2>5</h2>
+            <b>Template Tersedia</b><br>
+            <small>Jenis surat</small>
+        </div>
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <h2>Buat Surat Baru</h2>
+
+    <div class="grid">
+
+        <div class="menu-card">
+            <div style="font-size:42px">📘</div>
+            <h3>SPTJM</h3>
+            <p>Surat Pernyataan Tanggung Jawab Mutlak</p>
+            <a class="btn btn-blue" href="{{ url_for('surat_new', jenis='sptjm') }}">
+                Buat SPTJM
+            </a>
+        </div>
+
+        <div class="menu-card">
+            <div style="font-size:42px">📗</div>
+            <h3>Laporan</h3>
+            <p>Laporan Kegiatan</p>
+            <a class="btn btn-green" href="{{ url_for('surat_new', jenis='laporan_kegiatan') }}">
+                Buat Laporan
+            </a>
+        </div>
+
+        <div class="menu-card">
+            <div style="font-size:42px">📄</div>
+            <h3>Nota</h3>
+            <p>Nota Dinas</p>
+            <a class="btn btn-orange" href="{{ url_for('surat_new', jenis='nota_dinas') }}">
+                Buat Nota
+            </a>
+        </div>
+
+        <div class="menu-card">
+            <div style="font-size:42px">📑</div>
+            <h3>Pernyataan</h3>
+            <p>Surat Pernyataan</p>
+            <a class="btn btn-purple" href="{{ url_for('surat_new', jenis='surat_pernyataan') }}">
+                Buat Surat
+            </a>
+        </div>
+
+        <div class="menu-card">
+            <div style="font-size:42px">💰</div>
+            <h3>Rill</h3>
+            <p>Daftar Pengeluaran Rill</p>
+            <a class="btn btn-blue" href="{{ url_for('surat_new', jenis='daftar_pengeluaran_rill') }}">
+                Buat Rill
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <h2>Fitur Catatan No Surat</h2>
+
+    <p>
+        Simpan catatan nomor surat penting agar mudah diingat dan dicari kembali.
+    </p>
+
+    <a class="btn btn-blue" href="{{ url_for('no_surat') }}">
+        Buka Catatan No Surat
+    </a>
+
+</div>
+
+<div class="panel">
+
+    <h2>Laporan Terbaru</h2>
+
+    <table class="table">
+
+        <tr>
+            <th>Jenis</th>
+            <th>Nama Laporan</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+        </tr>
+
+        {% for r in latest %}
+
+        <tr>
+            <td>{{ jenis_surat[r.jenis] }}</td>
+            <td>{{ r.judul }}</td>
+            <td>{{ r.tanggal }}</td>
+            <td>
+                <span class="badge {{ r.status|lower }}">
+                    {{ r.status }}
+                </span>
+            </td>
+            <td>
+                <a class="btn btn-light" href="{{ url_for('surat_preview', id=r.id) }}">
+                    Preview
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}
