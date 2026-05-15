@@ -30,6 +30,7 @@
             padding: 22px;
             position: fixed;
             height: 100vh;
+            overflow-y: auto;
         }
 
         .brand {
@@ -37,6 +38,24 @@
             gap: 12px;
             align-items: center;
             margin-bottom: 28px;
+        }
+
+        .brand-logo-wrap {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: #fff;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .brand-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .brand-icon {
@@ -527,12 +546,22 @@
 <div class="layout">
 
     <aside class="sidebar">
+
         <div class="brand">
-            <div class="brand-icon">📄</div>
+
+            <div class="brand-logo-wrap">
+                <img
+                    src="{{ url_for('static', filename='img/docugen.jpeg') }}"
+                    alt="DocuGen Logo"
+                    class="brand-logo"
+                >
+            </div>
+
             <div>
                 <h2>DocuGen</h2>
                 <span>Document Generator</span>
             </div>
+
         </div>
 
         <nav class="nav">
@@ -542,6 +571,7 @@
             <a href="{{ url_for('surat_new', jenis='nota_dinas') }}">📄 Nota Dinas</a>
             <a href="{{ url_for('surat_new', jenis='surat_pernyataan') }}">📑 Surat Pernyataan</a>
             <a href="{{ url_for('surat_new', jenis='daftar_pengeluaran_rill') }}">💰 Pengeluaran Rill</a>
+            <a href="{{ url_for('no_surat') }}">🔖 Catatan No Surat</a>
             <a href="{{ url_for('arsip') }}">🗂 Arsip Surat</a>
             <a href="{{ url_for('pengaturan') }}">⚙️ Pengaturan Akun</a>
             <a href="{{ url_for('logout') }}">🚪 Logout</a>
@@ -556,11 +586,14 @@
                 <small>{{ user.role if user else 'Pegawai' }}</small>
             </div>
         </div>
+
     </aside>
 
     <main class="main">
+
         <div class="topbar">
             <h2>{{ title or 'Dashboard' }}</h2>
+
             <div>
                 🔔 &nbsp; Selamat datang,
                 <b>{{ user.nama_lengkap if user else 'Admin' }}</b>
@@ -568,6 +601,7 @@
         </div>
 
         <section class="content">
+
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for m in messages %}
@@ -579,7 +613,9 @@
             {% endwith %}
 
             {% block content %}{% endblock %}
+
         </section>
+
     </main>
 
 </div>
