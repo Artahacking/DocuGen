@@ -4,7 +4,6 @@
 
 <div class="preview-wrap">
 
-    <!-- TOOLBAR -->
     <div class="toolbar no-print">
 
         <b>Preview Daftar Pengeluaran Rill</b>
@@ -35,22 +34,18 @@
 
     </div>
 
-    <!-- PAPER -->
     <div class="paper">
 
         {% include 'kop.html' %}
 
-        <!-- TITLE -->
         <div class="doc-title">
             DAFTAR PENGELUARAN RILL
         </div>
 
-        <!-- PEMBUKA -->
         <p>
             Yang bertanda tangan dibawah ini :
         </p>
 
-        <!-- DATA -->
         <div style="margin-left:40px">
 
             <div class="row-line">
@@ -73,7 +68,6 @@
 
         </div>
 
-        <!-- PARAGRAF -->
         <p class="justify-text">
 
             Berdasarkan Surat Perjalanan Dinas Nomor :
@@ -84,7 +78,6 @@
 
         </p>
 
-        <!-- POINT -->
         <ol>
 
             <li>
@@ -94,7 +87,6 @@
 
         </ol>
 
-        <!-- TABLE -->
         <table class="doc-table">
 
             <tr>
@@ -134,28 +126,20 @@
 
             {% endfor %}
 
-            <!-- TOTAL -->
             <tr>
 
                 <td colspan="2" class="center">
-
                     <b>Total</b>
-
                 </td>
 
                 <td class="right">
-
-                    <b>
-                        {{ ns.total|rupiah }}
-                    </b>
-
+                    <b>{{ ns.total|rupiah }}</b>
                 </td>
 
             </tr>
 
         </table>
 
-        <!-- POINT 2 -->
         <ol start="2">
 
             <li class="justify-text">
@@ -171,7 +155,6 @@
 
         </ol>
 
-        <!-- PENUTUP -->
         <p class="justify-text">
 
             Demikian pernyataan ini saya buat dengan
@@ -179,10 +162,8 @@
 
         </p>
 
-        <!-- TTD -->
         <div class="ttd-wrap">
 
-            <!-- KIRI -->
             <div class="ttd-box left">
 
                 <div class="ttd-title">
@@ -207,7 +188,6 @@
 
             </div>
 
-            <!-- KANAN -->
             <div class="ttd-box right">
 
                 <div class="ttd-title">
@@ -243,12 +223,7 @@
 
 </div>
 
-<!-- STYLE -->
 <style>
-
-/* ============================== */
-/* PAPER */
-/* ============================== */
 
 .paper{
     width:850px;
@@ -259,10 +234,6 @@
     color:#000;
 }
 
-/* ============================== */
-/* TITLE */
-/* ============================== */
-
 .doc-title{
     text-align:center;
     font-size:28px;
@@ -271,28 +242,16 @@
     margin-bottom:30px;
 }
 
-/* ============================== */
-/* TEXT */
-/* ============================== */
-
 .justify-text{
     text-align:justify;
     line-height:1.8;
 }
-
-/* ============================== */
-/* ROW */
-/* ============================== */
 
 .row-line{
     display:grid;
     grid-template-columns:120px 20px 1fr;
     margin-bottom:8px;
 }
-
-/* ============================== */
-/* TABLE */
-/* ============================== */
 
 .doc-table{
     width:100%;
@@ -318,10 +277,6 @@
 .right{
     text-align:right;
 }
-
-/* ============================== */
-/* TTD */
-/* ============================== */
 
 .ttd-wrap{
     margin-top:60px;
@@ -353,17 +308,12 @@
     line-height:1.8;
 }
 
-/* ============================== */
-/* TOOLBAR */
-/* ============================== */
-
 .toolbar{
     background:#0b55d9;
     color:white;
     padding:15px 20px;
     border-radius:10px;
     margin-bottom:20px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -380,10 +330,6 @@
     background:white;
     color:#0b55d9;
 }
-
-/* ============================== */
-/* PRINT */
-/* ============================== */
 
 @media print{
 
