@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="panel">
+
+    <h2>Catatan No Surat</h2>
+
+    <p>
+        Fitur ini digunakan untuk menyimpan nomor surat dan keterangannya saja.
+    </p>
+
+    <form method="POST">
+
+        <div style="margin-bottom:15px;">
+            <label>No Surat</label>
+            <input
+                type="text"
+                name="no_surat"
+                placeholder="Contoh: UM.01.01.724"
+                required
+                style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px;"
+            >
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>Keterangan</label>
+            <textarea
+                name="keterangan"
+                rows="4"
+                placeholder="Contoh: Nomor surat untuk perjalanan dinas bulan April"
+                style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px;"
+            ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-blue">
+            Simpan Catatan
+        </button>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-light">
+            Kembali
+        </a>
+
+    </form>
+
+</div>
+
+<div class="panel">
+
+    <h2>Daftar Catatan No Surat</h2>
+
+    <form method="GET" style="margin-bottom:20px; display:flex; gap:10px;">
+
+        <input
+            type="text"
+            name="q"
+            value="{{ q }}"
+            placeholder="Cari no surat atau keterangan..."
+            style="flex:1; padding:12px; border:1px solid #ddd; border-radius:10px;"
+        >
+
+        <button type="submit" class="btn btn-blue">
+            Cari
+        </button>
+
+        <a href="{{ url_for('no_surat') }}" class="btn btn-light">
+            Reset
+        </a>
+
+    </form>
+
+    <table class="table">
+
+        <tr>
+            <th style="width:80px;">ID</th>
+            <th>No Surat</th>
+            <th>Keterangan</th>
+            <th style="width:120px;">Aksi</th>
+        </tr>
+
+        {% for r in rows %}
+
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.no_surat }}</td>
+            <td>{{ r.keterangan }}</td>
+            <td>
+                <form
+                    method="POST"
+                    action="{{ url_for('no_surat_delete', id=r.id) }}"
+                    onsubmit="return confirm('Yakin ingin menghapus catatan ini?')"
+                >
+                    <button type="submit" class="btn btn-orange">
+                        Hapus
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td colspan="4" style="text-align:center;">
+                Belum ada catatan no surat.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}
