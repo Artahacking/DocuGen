@@ -845,10 +845,6 @@ def clean_filename(text):
 
 
 def find_logo_static_path():
-    """
-    Mencari logo otomatis di folder static.
-    Jika nama logo kamu beda, tambahkan namanya di daftar candidates.
-    """
 
     candidates = [
         'logo.png',
@@ -875,9 +871,6 @@ def find_logo_static_path():
 
 
 def link_callback(uri, rel):
-    """
-    Supaya xhtml2pdf bisa baca gambar dari folder static.
-    """
 
     from urllib.parse import urlparse
 
@@ -941,7 +934,8 @@ def surat_pdf(id):
     )
 
     if result.err:
-        abort(500, 'PDF gagal dibuat. Periksa template PDF dan file logo.')
+        print("PDF ERROR:", result.err)
+        abort(500, 'PDF gagal dibuat. Periksa template PDF.')
 
     pdf.seek(0)
 
