@@ -844,18 +844,24 @@ def clean_filename(text):
     return aman.strip('_') or 'dokumen'
 
 
-def find_logo_static_path():
+def normalize_jenis(jenis):
+    return str(jenis or '').strip().lower()
 
+
+def find_logo_static_path():
     candidates = [
         'logo.png',
         'logo.jpg',
         'logo.jpeg',
+
         'img/logo.png',
         'img/logo.jpg',
         'img/logo.jpeg',
+
         'images/logo.png',
         'images/logo.jpg',
         'images/logo.jpeg',
+
         'assets/logo.png',
         'assets/logo.jpg',
         'assets/logo.jpeg'
@@ -871,7 +877,6 @@ def find_logo_static_path():
 
 
 def link_callback(uri, rel):
-
     from urllib.parse import urlparse
 
     parsed = urlparse(uri)
@@ -908,12 +913,35 @@ def surat_pdf(id):
     surat = get_surat_or_404(id)
     data = surat['data_dict']
 
-    if surat['jenis'] == 'daftar_pengeluaran_rill':
+    jenis = normalize_jenis(surat.get('jenis'))
+
+    # PENTING:
+    # Ini dibuat fleksibel karena kadang database/server menyimpan typo:
+    # daftar_pengeluaran_rill / daftar_pengeluaran_riil / daftar_pengeluaran_ril
+    if jenis in [
+        'daftar_pengeluaran_rill',
+        'daftar_pengeluaran_riil',
+        'daftar_pengeluaran_ril'
+    ]:
         template_pdf = 'pdf_daftar_pengeluaran_rill.html'
+        pdf_title = 'Daftar Pengeluaran Riil'
+        pdf_filename_prefix = 'daftar_pengeluaran_riil'
     else:
-        template_pdf = 'preview_' + surat['jenis'] + '.html'
+        # Untuk jenis lain sementara masih pakai preview.
+        # Nanti sebaiknya dibuat template PDF khusus juga.
+        template_pdf = 'preview_' + jenis + '.html'
+        pdf_title = 'Document Generator'
+        pdf_filename_prefix = jenis or 'dokumen'
 
     logo_src = find_logo_static_path()
+
+    print('================ PDF DEBUG ================')
+    print('SURAT ID       :', id)
+    print('JENIS DATABASE :', surat.get('jenis'))
+    print('JENIS NORMAL   :', jenis)
+    print('TEMPLATE PDF   :', template_pdf)
+    print('LOGO SRC       :', logo_src)
+    print('===========================================')
 
     html = render_template(
         template_pdf,
@@ -921,6 +949,7 @@ def surat_pdf(id):
         data=data,
         pdf=True,
         logo_src=logo_src,
+        pdf_title=pdf_title,
         user=current_user()
     )
 
@@ -934,23 +963,30 @@ def surat_pdf(id):
     )
 
     if result.err:
-        print("PDF ERROR:", result.err)
+        print('PDF ERROR:', result.err)
         abort(500, 'PDF gagal dibuat. Periksa template PDF.')
 
     pdf.seek(0)
 
     nama_file = clean_filename(
-        data.get('nama') or surat.get('judul') or surat['jenis']
+        data.get('nama') or surat.get('judul') or pdf_filename_prefix
     )
 
     download = request.args.get('download') == '1'
 
-    return send_file(
+    response = send_file(
         pdf,
         as_attachment=download,
-        download_name=f"daftar_pengeluaran_riil_{nama_file}.pdf",
+        download_name=f"{pdf_filename_prefix}_{nama_file}.pdf",
         mimetype='application/pdf'
     )
+
+    # Supaya browser/Railway tidak nampilin PDF cache lama
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+
+    return response
 
 # ======================================================
 # DELETE
