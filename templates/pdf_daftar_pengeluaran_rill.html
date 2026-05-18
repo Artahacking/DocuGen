@@ -1,386 +1,402 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar Pengeluaran Riil</title>
 
-{% block body %}
+    <style>
+        @page {
+            size: A4;
+            margin: 30pt 38pt 30pt 38pt;
+        }
 
-<div class="preview-wrap">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Times New Roman", serif;
+            font-size: 9.5pt;
+            color: #000;
+            line-height: 1.25;
+        }
 
-    <div class="toolbar no-print">
+        .page {
+            width: 100%;
+        }
 
-        <b>Preview Daftar Pengeluaran Riil</b>
+        .kop-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-        <div class="toolbar-actions">
+        .kop-table td {
+            border: none;
+            padding: 0;
+            vertical-align: middle;
+        }
 
-            <a class="btn btn-light"
-               href="{{ url_for('surat_edit', id=surat.id) }}">
-                Edit
-            </a>
+        .logo-cell {
+            width: 70pt;
+            text-align: left;
+        }
 
-            <a class="btn btn-light"
-               href="{{ url_for('arsip') }}">
-                Arsip
-            </a>
+        .logo-img {
+            width: 48pt;
+            height: 48pt;
+        }
 
-            <a class="btn btn-light"
-               href="{{ url_for('surat_pdf', id=surat.id, download=1) }}">
-                Download PDF
-            </a>
+        .kop-text {
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.1;
+        }
 
-            <button type="button"
-                    class="btn btn-light"
-                    onclick="openCleanPdf()">
-                Print
-            </button>
+        .kop-small {
+            font-size: 7.5pt;
+        }
 
-        </div>
+        .kop-bold {
+            font-size: 8.2pt;
+            font-weight: bold;
+        }
 
+        .kop-address {
+            font-size: 7.1pt;
+        }
+
+        .kop-email {
+            color: #0057c2;
+            font-weight: bold;
+        }
+
+        .kop-line {
+            border-top: 1.2pt solid #000;
+            margin-top: 7pt;
+            margin-bottom: 14pt;
+        }
+
+        .doc-title {
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15pt;
+            font-weight: bold;
+            margin-bottom: 22pt;
+        }
+
+        p {
+            margin: 0 0 9pt 0;
+        }
+
+        .justify {
+            text-align: justify;
+            line-height: 1.35;
+        }
+
+        .identity-table {
+            border-collapse: collapse;
+            margin-left: 22pt;
+            margin-bottom: 12pt;
+        }
+
+        .identity-table td {
+            border: none;
+            padding: 2pt 0;
+            font-size: 9.5pt;
+            vertical-align: top;
+        }
+
+        .label-col {
+            width: 68pt;
+        }
+
+        .colon-col {
+            width: 14pt;
+            text-align: center;
+        }
+
+        .value-col {
+            width: 300pt;
+        }
+
+        .number-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10pt;
+        }
+
+        .number-table td {
+            border: none;
+            padding: 0;
+            font-size: 9.5pt;
+            line-height: 1.35;
+            vertical-align: top;
+        }
+
+        .num-col {
+            width: 24pt;
+            text-align: right;
+            padding-right: 5pt;
+        }
+
+        .text-col {
+            text-align: justify;
+        }
+
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10pt;
+            margin-bottom: 12pt;
+        }
+
+        .doc-table th,
+        .doc-table td {
+            border: 1pt solid #000;
+            padding: 6pt;
+            font-size: 9.5pt;
+            line-height: 1.2;
+            vertical-align: middle;
+        }
+
+        .doc-table th {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .no-col {
+            width: 38pt;
+        }
+
+        .jumlah-col {
+            width: 135pt;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .ttd-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16pt;
+        }
+
+        .ttd-table td {
+            width: 50%;
+            border: none;
+            padding: 0;
+            text-align: center;
+            vertical-align: top;
+            font-size: 9.5pt;
+            line-height: 1.2;
+        }
+
+        .sign-space {
+            height: 52pt;
+            line-height: 52pt;
+            font-size: 1pt;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <table class="kop-table">
+        <tr>
+            <td class="logo-cell">
+                {% if logo_src %}
+                    <img class="logo-img" src="{{ logo_src }}">
+                {% endif %}
+            </td>
+
+            <td>
+                <div class="kop-text">
+                    <div class="kop-small">
+                        KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA
+                    </div>
+
+                    <div class="kop-small">
+                        DIREKTORAT JENDERAL PEMASYARAKATAN
+                    </div>
+
+                    <div class="kop-small">
+                        KANTOR WILAYAH SUMATERA UTARA
+                    </div>
+
+                    <div class="kop-bold">
+                        RUMAH TAHANAN NEGARA KELAS IIB PANGKALAN BRANDAN
+                    </div>
+
+                    <div class="kop-address">
+                        Jl. Stasiun No.09 Pangkalan Brandan, Kec. Babalan, Sumatera Utara
+                    </div>
+
+                    <div class="kop-address">
+                        Laman : rutanpangkalanbrandan.kemenkumham.go.id
+                    </div>
+
+                    <div class="kop-address">
+                        Pos-el :
+                        <span class="kop-email">
+                            rtn.pangkalanbrandan@kemenkumham.go.id
+                        </span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="kop-line"></div>
+
+    <div class="doc-title">
+        DAFTAR PENGELUARAN RIIL
     </div>
 
-    <div class="paper">
+    <p>
+        Yang bertanda tangan di bawah ini :
+    </p>
 
-        {% include 'kop.html' %}
+    <table class="identity-table">
+        <tr>
+            <td class="label-col">Nama</td>
+            <td class="colon-col">:</td>
+            <td class="value-col">{{ data.nama }}</td>
+        </tr>
 
-        <div class="doc-title">
-            DAFTAR PENGELUARAN RIIL
-        </div>
+        <tr>
+            <td class="label-col">NIP</td>
+            <td class="colon-col">:</td>
+            <td class="value-col">{{ data.nip }}</td>
+        </tr>
 
-        <p>
-            Yang bertanda tangan di bawah ini :
-        </p>
+        <tr>
+            <td class="label-col">Jabatan</td>
+            <td class="colon-col">:</td>
+            <td class="value-col">{{ data.jabatan }}</td>
+        </tr>
+    </table>
 
-        <div class="identity-box">
+    <p class="justify">
+        Berdasarkan Surat Perjalanan Dinas Nomor :
+        {{ data.nomor_surat }}
+        ({{ data.tanggal }}), dengan ini kami menyatakan sesungguhnya bahwa :
+    </p>
 
-            <div class="row-line">
-                <span>Nama</span>
-                <span>:</span>
-                <span>{{ data.nama }}</span>
-            </div>
-
-            <div class="row-line">
-                <span>NIP</span>
-                <span>:</span>
-                <span>{{ data.nip }}</span>
-            </div>
-
-            <div class="row-line">
-                <span>Jabatan</span>
-                <span>:</span>
-                <span>{{ data.jabatan }}</span>
-            </div>
-
-        </div>
-
-        <p class="justify-text">
-            Berdasarkan Surat Perjalanan Dinas Nomor :
-            {{ data.nomor_surat }}
-            ({{ data.tanggal }}),
-            dengan ini kami menyatakan sesungguhnya bahwa :
-        </p>
-
-        <ol class="doc-list">
-            <li>
+    <table class="number-table">
+        <tr>
+            <td class="num-col">1.</td>
+            <td class="text-col">
                 Biaya di bawah ini yang tidak dapat diperoleh bukti-bukti pengeluarannya, meliputi:
-            </li>
-        </ol>
+            </td>
+        </tr>
+    </table>
 
-        <table class="doc-table">
+    <table class="doc-table">
+        <tr>
+            <th class="no-col">No</th>
+            <th>Uraian</th>
+            <th class="jumlah-col">Jumlah</th>
+        </tr>
 
-            <tr>
-                <th class="col-no">No</th>
-                <th>Uraian</th>
-                <th class="col-jumlah">Jumlah</th>
-            </tr>
+        {% set ns = namespace(total=0) %}
 
-            {% set ns = namespace(total=0) %}
+        {% for p in data.pengeluaran %}
 
-            {% for p in data.pengeluaran %}
+            {% set angka =
+                (p.jumlah|string)
+                .replace('Rp.','')
+                .replace('Rp','')
+                .replace('rp.','')
+                .replace('rp','')
+                .replace('.','')
+                .replace(',','')
+                .replace(' ','')
+                |int
+            %}
 
-                {% set angka =
-                    (p.jumlah|string)
-                    .replace('Rp.','')
-                    .replace('Rp','')
-                    .replace('rp.','')
-                    .replace('rp','')
-                    .replace('.','')
-                    .replace(',','')
-                    .replace(' ','')
-                    |int
-                %}
-
-                {% set ns.total = ns.total + angka %}
-
-                <tr>
-                    <td class="center">
-                        {{ loop.index }}
-                    </td>
-
-                    <td>
-                        {{ p.uraian }}
-                    </td>
-
-                    <td class="right">
-                        {{ p.jumlah|rupiah }}
-                    </td>
-                </tr>
-
-            {% endfor %}
+            {% set ns.total = ns.total + angka %}
 
             <tr>
-                <td colspan="2" class="center">
-                    <b>Total</b>
+                <td class="center">
+                    {{ loop.index }}
+                </td>
+
+                <td>
+                    {{ p.uraian }}
                 </td>
 
                 <td class="right">
-                    <b>{{ ns.total|rupiah }}</b>
+                    {{ p.jumlah|rupiah }}
                 </td>
             </tr>
 
-        </table>
+        {% endfor %}
 
-        <ol start="2" class="doc-list">
-            <li class="justify-text">
+        <tr>
+            <td colspan="2" class="center bold">
+                Total
+            </td>
+
+            <td class="right bold">
+                {{ ns.total|rupiah }}
+            </td>
+        </tr>
+    </table>
+
+    <table class="number-table">
+        <tr>
+            <td class="num-col">2.</td>
+            <td class="text-col">
                 Jumlah uang tersebut pada angka 1 di atas benar-benar dikeluarkan untuk pelaksanaan
                 perjalanan dinas dimaksud dan apabila dikemudian hari terdapat kelebihan atas pembayaran,
                 kami bersedia untuk menyetorkan kelebihan tersebut ke kas negara.
-            </li>
-        </ol>
+            </td>
+        </tr>
+    </table>
 
-        <p class="justify-text">
-            Demikian pernyataan ini saya buat dengan sebenarnya, untuk digunakan sebagaimana mestinya.
-        </p>
+    <p class="justify">
+        Demikian pernyataan ini saya buat dengan sebenarnya, untuk digunakan sebagaimana mestinya.
+    </p>
 
-        <div class="ttd-wrap">
+    <table class="ttd-table">
+        <tr>
+            <td>
+                Mengetahui/Menyetujui
+                <br>
+                Pejabat Pembuat Komitmen
 
-            <div class="ttd-box">
-                <div class="ttd-title">
-                    Mengetahui/Menyetujui
-                    <br>
-                    Pejabat Pembuat Komitmen
-                </div>
+                <div class="sign-space">&nbsp;</div>
 
-                <div class="sign-space"></div>
+                <b>( {{ data.mengetahui_nama }} )</b>
+                <br>
+                NIP {{ data.mengetahui_nip }}
+            </td>
 
-                <div class="ttd-name">
-                    <b>( {{ data.mengetahui_nama }} )</b>
-                    <br>
-                    NIP {{ data.mengetahui_nip }}
-                </div>
-            </div>
+            <td>
+                {{ data.ttd_tempat }},
+                {{ data.ttd_tanggal }}
+                <br>
+                Pelaksana SPD
 
-            <div class="ttd-box">
-                <div class="ttd-title">
-                    {{ data.ttd_tempat }},
-                    {{ data.ttd_tanggal }}
-                    <br>
-                    Pelaksana SPD
-                </div>
+                <div class="sign-space">&nbsp;</div>
 
-                <div class="sign-space"></div>
-
-                <div class="ttd-name">
-                    <b>( {{ data.ttd_nama }} )</b>
-                    <br>
-                    NIP {{ data.ttd_nip }}
-                </div>
-            </div>
-
-        </div>
-
-    </div>
+                <b>( {{ data.ttd_nama }} )</b>
+                <br>
+                NIP {{ data.ttd_nip }}
+            </td>
+        </tr>
+    </table>
 
 </div>
 
-<script>
-function openCleanPdf() {
-    const pdfUrl = "{{ url_for('surat_pdf', id=surat.id) }}";
-    window.open(pdfUrl, "_blank");
-}
-</script>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    background: #4b4b4b;
-}
-
-.preview-wrap {
-    padding: 20px 0 40px;
-}
-
-.toolbar {
-    background: #0b55d9;
-    color: white;
-    padding: 14px 20px;
-    border-radius: 8px;
-    margin: 0 10px 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: Arial, sans-serif;
-}
-
-.toolbar-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.btn {
-    display: inline-block;
-    padding: 9px 14px;
-    border-radius: 7px;
-    border: 0;
-    text-decoration: none;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn-light {
-    background: white;
-    color: #0b55d9;
-}
-
-.paper {
-    width: 210mm;
-    min-height: 297mm;
-    background: #fff;
-    margin: auto;
-    padding: 14mm 18mm;
-    font-family: "Times New Roman", serif;
-    color: #000;
-    font-size: 11.5pt;
-    line-height: 1.25;
-    box-shadow: 0 0 8px rgba(0,0,0,0.35);
-}
-
-.doc-title {
-    text-align: center;
-    font-size: 19pt;
-    font-weight: bold;
-    margin-top: 7mm;
-    margin-bottom: 10mm;
-    letter-spacing: 0.3px;
-}
-
-p {
-    margin: 0 0 5mm;
-}
-
-.justify-text {
-    text-align: justify;
-    line-height: 1.45;
-}
-
-.identity-box {
-    margin-left: 10mm;
-    margin-bottom: 6mm;
-}
-
-.row-line {
-    display: grid;
-    grid-template-columns: 32mm 5mm 1fr;
-    margin-bottom: 2.5mm;
-}
-
-.doc-list {
-    margin-top: 0;
-    margin-bottom: 4mm;
-    padding-left: 9mm;
-}
-
-.doc-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 4mm;
-    margin-bottom: 6mm;
-    page-break-inside: avoid;
-}
-
-.doc-table th,
-.doc-table td {
-    border: 1px solid #000;
-    padding: 3mm;
-    vertical-align: middle;
-}
-
-.doc-table th {
-    text-align: center;
-    font-weight: bold;
-}
-
-.col-no {
-    width: 17mm;
-}
-
-.col-jumlah {
-    width: 52mm;
-}
-
-.center {
-    text-align: center;
-}
-
-.right {
-    text-align: right;
-}
-
-.ttd-wrap {
-    margin-top: 8mm;
-    display: flex;
-    justify-content: space-between;
-    page-break-inside: avoid;
-}
-
-.ttd-box {
-    width: 45%;
-    text-align: center;
-}
-
-.ttd-title {
-    line-height: 1.35;
-}
-
-.sign-space {
-    height: 24mm;
-}
-
-.ttd-name {
-    line-height: 1.35;
-}
-
-@media print {
-    @page {
-        size: A4;
-        margin: 0;
-    }
-
-    html,
-    body {
-        width: 210mm;
-        min-height: 297mm;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: white !important;
-    }
-
-    .no-print {
-        display: none !important;
-    }
-
-    .preview-wrap {
-        padding: 0 !important;
-    }
-
-    .paper {
-        width: 210mm;
-        min-height: 297mm;
-        margin: 0 !important;
-        padding: 14mm 18mm;
-        box-shadow: none !important;
-    }
-}
-</style>
-
-{% endblock %}
+</body>
+</html>
