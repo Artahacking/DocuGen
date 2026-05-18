@@ -7,60 +7,81 @@
     <style>
         @page {
             size: A4;
-            margin: 30pt 38pt 30pt 38pt;
+            margin: 28pt 38pt 28pt 38pt;
         }
 
+        html,
         body {
             margin: 0;
             padding: 0;
             font-family: "Times New Roman", serif;
             font-size: 9.5pt;
             color: #000;
-            line-height: 1.25;
+            line-height: 1.22;
         }
 
         .page {
             width: 100%;
         }
 
-        .kop-table {
+        /* =========================
+           KOP SURAT
+        ========================= */
+
+        .kop-wrapper {
             width: 100%;
             border-collapse: collapse;
+            margin: 0;
+            padding: 0;
         }
 
-        .kop-table td {
+        .kop-wrapper td {
             border: none;
             padding: 0;
+            margin: 0;
             vertical-align: middle;
         }
 
-        .logo-cell {
-            width: 70pt;
+        .kop-logo-cell {
+            width: 72pt;
             text-align: left;
+            vertical-align: middle;
         }
 
-        .logo-img {
+        .kop-right-cell {
+            width: 72pt;
+        }
+
+        .kop-logo {
             width: 48pt;
             height: 48pt;
         }
 
-        .kop-text {
+        .kop-text-cell {
             text-align: center;
+            vertical-align: middle;
+        }
+
+        .kop-text {
             font-family: Arial, Helvetica, sans-serif;
-            line-height: 1.1;
+            text-align: center;
+            color: #000;
+            line-height: 1.08;
         }
 
-        .kop-small {
-            font-size: 7.5pt;
+        .kop-top {
+            font-size: 7.6pt;
+            font-weight: normal;
         }
 
-        .kop-bold {
-            font-size: 8.2pt;
+        .kop-instansi {
+            font-size: 8.1pt;
             font-weight: bold;
         }
 
-        .kop-address {
+        .kop-alamat {
             font-size: 7.1pt;
+            font-weight: normal;
         }
 
         .kop-email {
@@ -68,59 +89,79 @@
             font-weight: bold;
         }
 
-        .kop-line {
-            border-top: 1.2pt solid #000;
+        .kop-line-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 7pt;
-            margin-bottom: 14pt;
+            margin-bottom: 13pt;
         }
+
+        .kop-line-table td {
+            border-top: 1.3pt solid #000;
+            height: 0;
+            padding: 0;
+            line-height: 0;
+            font-size: 0;
+        }
+
+        /* =========================
+           JUDUL
+        ========================= */
 
         .doc-title {
             text-align: center;
             font-family: Arial, Helvetica, sans-serif;
             font-size: 15pt;
             font-weight: bold;
-            margin-bottom: 22pt;
+            margin: 0 0 22pt 0;
+            padding: 0;
         }
+
+        /* =========================
+           ISI
+        ========================= */
 
         p {
             margin: 0 0 9pt 0;
+            padding: 0;
         }
 
         .justify {
             text-align: justify;
-            line-height: 1.35;
+            line-height: 1.36;
         }
 
         .identity-table {
             border-collapse: collapse;
-            margin-left: 22pt;
+            margin-left: 24pt;
             margin-bottom: 12pt;
         }
 
         .identity-table td {
             border: none;
-            padding: 2pt 0;
+            padding: 2.2pt 0;
             font-size: 9.5pt;
+            line-height: 1.22;
             vertical-align: top;
         }
 
-        .label-col {
-            width: 68pt;
+        .identity-label {
+            width: 70pt;
         }
 
-        .colon-col {
+        .identity-colon {
             width: 14pt;
             text-align: center;
         }
 
-        .value-col {
-            width: 300pt;
+        .identity-value {
+            width: 260pt;
         }
 
         .number-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10pt;
+            margin: 0 0 12pt 0;
         }
 
         .number-table td {
@@ -134,24 +175,28 @@
         .num-col {
             width: 24pt;
             text-align: right;
-            padding-right: 5pt;
+            padding-right: 6pt;
         }
 
         .text-col {
             text-align: justify;
         }
 
+        /* =========================
+           TABEL PENGELUARAN
+        ========================= */
+
         .doc-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10pt;
-            margin-bottom: 12pt;
+            margin-top: 11pt;
+            margin-bottom: 13pt;
         }
 
         .doc-table th,
         .doc-table td {
             border: 1pt solid #000;
-            padding: 6pt;
+            padding: 7pt 7pt;
             font-size: 9.5pt;
             line-height: 1.2;
             vertical-align: middle;
@@ -162,12 +207,12 @@
             font-weight: bold;
         }
 
-        .no-col {
-            width: 38pt;
+        .col-no {
+            width: 44pt;
         }
 
-        .jumlah-col {
-            width: 135pt;
+        .col-jumlah {
+            width: 145pt;
         }
 
         .center {
@@ -182,26 +227,43 @@
             font-weight: bold;
         }
 
+        /* =========================
+           TANDA TANGAN
+        ========================= */
+
         .ttd-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 16pt;
+            margin-top: 18pt;
+            page-break-inside: avoid;
         }
 
         .ttd-table td {
-            width: 50%;
             border: none;
+            width: 50%;
             padding: 0;
             text-align: center;
             vertical-align: top;
             font-size: 9.5pt;
-            line-height: 1.2;
+            line-height: 1.22;
+        }
+
+        .ttd-title {
+            line-height: 1.22;
         }
 
         .sign-space {
-            height: 52pt;
-            line-height: 52pt;
+            height: 55pt;
+            line-height: 55pt;
             font-size: 1pt;
+        }
+
+        .ttd-name {
+            line-height: 1.22;
+        }
+
+        .avoid-break {
+            page-break-inside: avoid;
         }
     </style>
 </head>
@@ -210,41 +272,44 @@
 
 <div class="page">
 
-    <table class="kop-table">
+    <!-- =========================
+         KOP SURAT
+    ========================== -->
+    <table class="kop-wrapper">
         <tr>
-            <td class="logo-cell">
+            <td class="kop-logo-cell">
                 {% if logo_src %}
-                    <img class="logo-img" src="{{ logo_src }}">
+                    <img class="kop-logo" src="{{ logo_src }}">
                 {% endif %}
             </td>
 
-            <td>
+            <td class="kop-text-cell">
                 <div class="kop-text">
-                    <div class="kop-small">
+                    <div class="kop-top">
                         KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN REPUBLIK INDONESIA
                     </div>
 
-                    <div class="kop-small">
+                    <div class="kop-top">
                         DIREKTORAT JENDERAL PEMASYARAKATAN
                     </div>
 
-                    <div class="kop-small">
+                    <div class="kop-top">
                         KANTOR WILAYAH SUMATERA UTARA
                     </div>
 
-                    <div class="kop-bold">
+                    <div class="kop-instansi">
                         RUMAH TAHANAN NEGARA KELAS IIB PANGKALAN BRANDAN
                     </div>
 
-                    <div class="kop-address">
+                    <div class="kop-alamat">
                         Jl. Stasiun No.09 Pangkalan Brandan, Kec. Babalan, Sumatera Utara
                     </div>
 
-                    <div class="kop-address">
+                    <div class="kop-alamat">
                         Laman : rutanpangkalanbrandan.kemenkumham.go.id
                     </div>
 
-                    <div class="kop-address">
+                    <div class="kop-alamat">
                         Pos-el :
                         <span class="kop-email">
                             rtn.pangkalanbrandan@kemenkumham.go.id
@@ -252,39 +317,52 @@
                     </div>
                 </div>
             </td>
+
+            <td class="kop-right-cell">
+                &nbsp;
+            </td>
         </tr>
     </table>
 
-    <div class="kop-line"></div>
+    <hr style="border:0; border-top:1.3pt solid #000; margin-top:7pt; margin-bottom:13pt;">
 
+    <!-- =========================
+         JUDUL
+    ========================== -->
     <div class="doc-title">
         DAFTAR PENGELUARAN RIIL
     </div>
 
+    <!-- =========================
+         IDENTITAS
+    ========================== -->
     <p>
         Yang bertanda tangan di bawah ini :
     </p>
 
     <table class="identity-table">
         <tr>
-            <td class="label-col">Nama</td>
-            <td class="colon-col">:</td>
-            <td class="value-col">{{ data.nama }}</td>
+            <td class="identity-label">Nama</td>
+            <td class="identity-colon">:</td>
+            <td class="identity-value">{{ data.nama }}</td>
         </tr>
 
         <tr>
-            <td class="label-col">NIP</td>
-            <td class="colon-col">:</td>
-            <td class="value-col">{{ data.nip }}</td>
+            <td class="identity-label">NIP</td>
+            <td class="identity-colon">:</td>
+            <td class="identity-value">{{ data.nip }}</td>
         </tr>
 
         <tr>
-            <td class="label-col">Jabatan</td>
-            <td class="colon-col">:</td>
-            <td class="value-col">{{ data.jabatan }}</td>
+            <td class="identity-label">Jabatan</td>
+            <td class="identity-colon">:</td>
+            <td class="identity-value">{{ data.jabatan }}</td>
         </tr>
     </table>
 
+    <!-- =========================
+         PARAGRAF PEMBUKA
+    ========================== -->
     <p class="justify">
         Berdasarkan Surat Perjalanan Dinas Nomor :
         {{ data.nomor_surat }}
@@ -300,11 +378,14 @@
         </tr>
     </table>
 
-    <table class="doc-table">
+    <!-- =========================
+         TABEL PENGELUARAN
+    ========================== -->
+    <table class="doc-table avoid-break">
         <tr>
-            <th class="no-col">No</th>
+            <th class="col-no">No</th>
             <th>Uraian</th>
-            <th class="jumlah-col">Jumlah</th>
+            <th class="col-jumlah">Jumlah</th>
         </tr>
 
         {% set ns = namespace(total=0) %}
@@ -352,6 +433,9 @@
         </tr>
     </table>
 
+    <!-- =========================
+         PERNYATAAN
+    ========================== -->
     <table class="number-table">
         <tr>
             <td class="num-col">2.</td>
@@ -367,31 +451,42 @@
         Demikian pernyataan ini saya buat dengan sebenarnya, untuk digunakan sebagaimana mestinya.
     </p>
 
-    <table class="ttd-table">
+    <!-- =========================
+         TANDA TANGAN
+    ========================== -->
+    <table class="ttd-table avoid-break">
         <tr>
             <td>
-                Mengetahui/Menyetujui
-                <br>
-                Pejabat Pembuat Komitmen
+                <div class="ttd-title">
+                    Mengetahui/Menyetujui
+                    <br>
+                    Pejabat Pembuat Komitmen
+                </div>
 
                 <div class="sign-space">&nbsp;</div>
 
-                <b>( {{ data.mengetahui_nama }} )</b>
-                <br>
-                NIP {{ data.mengetahui_nip }}
+                <div class="ttd-name">
+                    <b>( {{ data.mengetahui_nama }} )</b>
+                    <br>
+                    NIP {{ data.mengetahui_nip }}
+                </div>
             </td>
 
             <td>
-                {{ data.ttd_tempat }},
-                {{ data.ttd_tanggal }}
-                <br>
-                Pelaksana SPD
+                <div class="ttd-title">
+                    {{ data.ttd_tempat }},
+                    {{ data.ttd_tanggal }}
+                    <br>
+                    Pelaksana SPD
+                </div>
 
                 <div class="sign-space">&nbsp;</div>
 
-                <b>( {{ data.ttd_nama }} )</b>
-                <br>
-                NIP {{ data.ttd_nip }}
+                <div class="ttd-name">
+                    <b>( {{ data.ttd_nama }} )</b>
+                    <br>
+                    NIP {{ data.ttd_nip }}
+                </div>
             </td>
         </tr>
     </table>
