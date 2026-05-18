@@ -55,7 +55,7 @@
                 </h3>
 
                 <p>
-                    Cari berdasarkan jenis surat, status, atau nama laporan
+                    Cari berdasarkan jenis surat, status, nama laporan, nomor surat, atau tanggal.
                 </p>
 
             </div>
@@ -76,8 +76,8 @@
                     <input
                         type="text"
                         name="q"
-                        placeholder="Cari nama laporan atau nomor surat..."
-                        value="{{ request.args.get('q','') }}">
+                        placeholder="Cari nama laporan, nomor surat, atau tanggal..."
+                        value="{{ q }}">
 
                 </div>
 
@@ -97,12 +97,12 @@
                         {% for k,v in jenis_surat.items() %}
 
                         <option
-                            value="{{k}}"
-                            {% if request.args.get('jenis')==k %}
+                            value="{{ k }}"
+                            {% if jenis == k %}
                                 selected
                             {% endif %}
                         >
-                            {{v}}
+                            {{ v }}
                         </option>
 
                         {% endfor %}
@@ -126,7 +126,7 @@
 
                         <option
                             value="Selesai"
-                            {% if request.args.get('status')=='Selesai' %}
+                            {% if status == 'Selesai' %}
                                 selected
                             {% endif %}
                         >
@@ -135,7 +135,7 @@
 
                         <option
                             value="Draft"
-                            {% if request.args.get('status')=='Draft' %}
+                            {% if status == 'Draft' %}
                                 selected
                             {% endif %}
                         >
@@ -146,16 +146,46 @@
 
                 </div>
 
-                <!-- BUTTON -->
-                <div class="button-wrap">
+                <!-- PER PAGE -->
+                <div class="form-group">
 
-                    <button class="search-btn">
+                    <label>
+                        Data Per Halaman
+                    </label>
 
-                        Cari Arsip
+                    <select name="per_page">
 
-                    </button>
+                        <option value="5" {% if per_page == 5 %}selected{% endif %}>
+                            5 Data
+                        </option>
+
+                        <option value="10" {% if per_page == 10 %}selected{% endif %}>
+                            10 Data
+                        </option>
+
+                        <option value="15" {% if per_page == 15 %}selected{% endif %}>
+                            15 Data
+                        </option>
+
+                        <option value="20" {% if per_page == 20 %}selected{% endif %}>
+                            20 Data
+                        </option>
+
+                    </select>
 
                 </div>
+
+            </div>
+
+            <div class="filter-actions">
+
+                <button class="search-btn">
+                    Cari Arsip
+                </button>
+
+                <a href="{{ url_for('arsip') }}" class="reset-btn">
+                    Reset Filter
+                </a>
 
             </div>
 
@@ -179,7 +209,12 @@
 
                 <p>
                     Total data arsip tersimpan :
-                    <b>{{ rows|length }}</b>
+                    <b>{{ total_data }}</b>
+                    |
+                    Halaman
+                    <b>{{ page }}</b>
+                    dari
+                    <b>{{ total_pages }}</b>
                 </p>
 
             </div>
@@ -215,7 +250,7 @@
 
                             <div class="number-box">
 
-                                {{ loop.index }}
+                                {{ start_no + loop.index0 }}
 
                             </div>
 
@@ -238,6 +273,14 @@
                                 {{ r.judul }}
 
                             </div>
+
+                            {% if r.nomor_surat %}
+
+                            <div class="nomor-surat">
+                                No: {{ r.nomor_surat }}
+                            </div>
+
+                            {% endif %}
 
                         </td>
 
@@ -267,7 +310,7 @@
 
                                 <!-- PREVIEW -->
                                 <a
-                                    href="{{ url_for('surat_preview',id=r.id) }}"
+                                    href="{{ url_for('surat_preview', id=r.id) }}"
                                     class="action-btn preview-btn">
 
                                     👁 Preview
@@ -276,7 +319,7 @@
 
                                 <!-- EDIT -->
                                 <a
-                                    href="{{ url_for('surat_edit',id=r.id) }}"
+                                    href="{{ url_for('surat_edit', id=r.id) }}"
                                     class="action-btn edit-btn">
 
                                     ✏ Edit
@@ -285,7 +328,7 @@
 
                                 <!-- PDF -->
                                 <a
-                                    href="{{ url_for('surat_pdf',id=r.id) }}"
+                                    href="{{ url_for('surat_pdf', id=r.id) }}"
                                     class="action-btn pdf-btn">
 
                                     ⬇ PDF
@@ -295,10 +338,10 @@
                                 <!-- DELETE -->
                                 <form
                                     method="post"
-                                    action="{{ url_for('surat_delete',id=r.id) }}"
+                                    action="{{ url_for('surat_delete', id=r.id) }}"
                                     onsubmit="return confirm('Hapus surat ini?')">
 
-                                    <button class="action-btn delete-btn">
+                                    <button type="submit" class="action-btn delete-btn">
 
                                         🗑 Hapus
 
@@ -329,7 +372,7 @@
                                 </h3>
 
                                 <p>
-                                    Belum ada data surat yang tersedia.
+                                    Tidak ada data surat yang sesuai dengan filter.
                                 </p>
 
                             </div>
@@ -345,6 +388,125 @@
             </table>
 
         </div>
+
+        <!-- ===================================== -->
+        <!-- PAGINATION -->
+        <!-- ===================================== -->
+
+        {% if total_pages > 1 %}
+
+        <div class="pagination-wrap">
+
+            <div class="pagination-info">
+
+                Menampilkan
+                <b>{{ start_no }}</b>
+                -
+                <b>{{ start_no + rows|length - 1 }}</b>
+                dari
+                <b>{{ total_data }}</b>
+                data
+
+            </div>
+
+            <div class="pagination">
+
+                <!-- FIRST -->
+                <a
+                    class="page-btn {% if page <= 1 %}disabled{% endif %}"
+                    href="{% if page > 1 %}{{ url_for('arsip', q=q, jenis=jenis, status=status, per_page=per_page, page=1) }}{% else %}#{% endif %}">
+
+                    « Awal
+
+                </a>
+
+                <!-- PREVIOUS -->
+                <a
+                    class="page-btn {% if page <= 1 %}disabled{% endif %}"
+                    href="{% if page > 1 %}{{ url_for('arsip', q=q, jenis=jenis, status=status, per_page=per_page, page=page-1) }}{% else %}#{% endif %}">
+
+                    ‹ Sebelumnya
+
+                </a>
+
+                {% set start_page = page - 2 if page - 2 > 1 else 1 %}
+                {% set end_page = page + 2 if page + 2 < total_pages else total_pages %}
+
+                {% if start_page > 1 %}
+
+                <a
+                    class="page-number"
+                    href="{{ url_for('arsip', q=q, jenis=jenis, status=status, per_page=per_page, page=1) }}">
+
+                    1
+
+                </a>
+
+                {% if start_page > 2 %}
+
+                <span class="page-dots">
+                    ...
+                </span>
+
+                {% endif %}
+
+                {% endif %}
+
+                {% for p in range(start_page, end_page + 1) %}
+
+                <a
+                    class="page-number {% if p == page %}active{% endif %}"
+                    href="{{ url_for('arsip', q=q, jenis=jenis, status=status, per_page=per_page, page=p) }}">
+
+                    {{ p }}
+
+                </a>
+
+                {% endfor %}
+
+                {% if end_page < total_pages %}
+
+                {% if end_page < total_pages - 1 %}
+
+                <span class="page-dots">
+                    ...
+                </span>
+
+                {% endif %}
+
+                <a
+                    class="page-number"
+                    href="{{ url_for('arsip', q=q, jenis=jenis, status=status, per_page=per_page, page=total_pages) }}">
+
+                    {{ total_pages }}
+
+                </a>
+
+                {% endif %}
+
+                <!-- NEXT -->
+                <a
+                    class="page-btn {% if page >= total_pages %}disabled{% endif %}"
+                    href="{% if page < total_pages %}{{ url_for('arsip', q=q, jenis=jenis, status=status, per_page=per_page, page=page+1) }}{% else %}#{% endif %}">
+
+                    Berikutnya ›
+
+                </a>
+
+                <!-- LAST -->
+                <a
+                    class="page-btn {% if page >= total_pages %}disabled{% endif %}"
+                    href="{% if page < total_pages %}{{ url_for('arsip', q=q, jenis=jenis, status=status, per_page=per_page, page=total_pages) }}{% else %}#{% endif %}">
+
+                    Akhir »
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endif %}
 
     </div>
 
@@ -607,16 +769,16 @@
         0 0 0 4px rgba(37,99,235,.10);
     }
 
-    .button-wrap{
+    .filter-actions{
 
         display:flex;
 
-        align-items:end;
+        gap:14px;
+
+        margin-top:20px;
     }
 
     .search-btn{
-
-        width:100%;
 
         border:none;
 
@@ -629,7 +791,7 @@
 
         color:white;
 
-        padding:15px;
+        padding:15px 26px;
 
         border-radius:16px;
 
@@ -646,6 +808,38 @@
     }
 
     .search-btn:hover{
+
+        transform:translateY(-2px);
+    }
+
+    .reset-btn{
+
+        display:inline-flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        background:#f1f5f9;
+
+        color:#334155;
+
+        padding:15px 22px;
+
+        border-radius:16px;
+
+        font-size:15px;
+
+        font-weight:800;
+
+        text-decoration:none;
+
+        transition:.25s ease;
+    }
+
+    .reset-btn:hover{
+
+        background:#e2e8f0;
 
         transform:translateY(-2px);
     }
@@ -798,6 +992,15 @@
         color:#0f172a;
     }
 
+    .nomor-surat{
+
+        color:#64748b;
+
+        font-size:12px;
+
+        margin-top:5px;
+    }
+
     .tanggal-box{
 
         color:#334155;
@@ -912,6 +1115,125 @@
     }
 
     /* ===================================== */
+    /* PAGINATION */
+    /* ===================================== */
+
+    .pagination-wrap{
+
+        margin-top:28px;
+
+        padding-top:24px;
+
+        border-top:1px solid #e5e7eb;
+
+        display:flex;
+
+        justify-content:space-between;
+
+        align-items:center;
+
+        gap:18px;
+
+        flex-wrap:wrap;
+    }
+
+    .pagination-info{
+
+        color:#64748b;
+
+        font-size:14px;
+    }
+
+    .pagination{
+
+        display:flex;
+
+        align-items:center;
+
+        gap:8px;
+
+        flex-wrap:wrap;
+    }
+
+    .page-btn,
+    .page-number,
+    .page-dots{
+
+        min-width:42px;
+
+        height:42px;
+
+        padding:0 14px;
+
+        display:inline-flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        border-radius:12px;
+
+        font-size:13px;
+
+        font-weight:800;
+
+        text-decoration:none;
+    }
+
+    .page-btn,
+    .page-number{
+
+        background:#f1f5f9;
+
+        color:#334155;
+
+        transition:.25s ease;
+    }
+
+    .page-btn:hover,
+    .page-number:hover{
+
+        background:#dbeafe;
+
+        color:#1d4ed8;
+
+        transform:translateY(-2px);
+    }
+
+    .page-number.active{
+
+        background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+        color:white;
+
+        box-shadow:
+        0 10px 20px rgba(37,99,235,.20);
+    }
+
+    .page-btn.disabled{
+
+        background:#f8fafc;
+
+        color:#cbd5e1;
+
+        pointer-events:none;
+
+        cursor:not-allowed;
+    }
+
+    .page-dots{
+
+        color:#94a3b8;
+
+        background:transparent;
+    }
+
+    /* ===================================== */
     /* EMPTY */
     /* ===================================== */
 
@@ -966,6 +1288,13 @@
         .archive-header h1{
 
             font-size:30px;
+        }
+
+        .pagination-wrap{
+
+            flex-direction:column;
+
+            align-items:flex-start;
         }
 
     }
