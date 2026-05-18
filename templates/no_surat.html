@@ -4,19 +4,32 @@
 
 <div class="panel">
 
-    <h2>Catatan No Surat</h2>
+    {% if edit_row %}
+        <h2>Edit Catatan No Surat</h2>
 
-    <p>
-        Fitur ini digunakan untuk menyimpan nomor surat dan keterangannya saja.
-    </p>
+        <p>
+            Silakan ubah nomor surat dan keterangannya.
+        </p>
+    {% else %}
+        <h2>Catatan No Surat</h2>
 
-    <form method="POST">
+        <p>
+            Fitur ini digunakan untuk menyimpan nomor surat dan keterangannya saja.
+        </p>
+    {% endif %}
+
+    <form
+        method="POST"
+        action="{% if edit_row %}{{ url_for('no_surat_edit', id=edit_row.id) }}{% else %}{{ url_for('no_surat') }}{% endif %}"
+    >
 
         <div style="margin-bottom:15px;">
             <label>No Surat</label>
+
             <input
                 type="text"
                 name="no_surat"
+                value="{% if edit_row %}{{ edit_row.no_surat }}{% endif %}"
                 placeholder="Contoh: UM.01.01.724"
                 required
                 style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px;"
@@ -25,21 +38,36 @@
 
         <div style="margin-bottom:15px;">
             <label>Keterangan</label>
+
             <textarea
                 name="keterangan"
                 rows="4"
                 placeholder="Contoh: Nomor surat untuk perjalanan dinas bulan April"
                 style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px;"
-            ></textarea>
+            >{% if edit_row %}{{ edit_row.keterangan }}{% endif %}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-blue">
-            Simpan Catatan
-        </button>
+        {% if edit_row %}
 
-        <a href="{{ url_for('dashboard') }}" class="btn btn-light">
-            Kembali
-        </a>
+            <button type="submit" class="btn btn-blue">
+                Update Catatan
+            </button>
+
+            <a href="{{ url_for('no_surat') }}" class="btn btn-light">
+                Batal Edit
+            </a>
+
+        {% else %}
+
+            <button type="submit" class="btn btn-blue">
+                Simpan Catatan
+            </button>
+
+            <a href="{{ url_for('dashboard') }}" class="btn btn-light">
+                Kembali
+            </a>
+
+        {% endif %}
 
     </form>
 
@@ -49,7 +77,10 @@
 
     <h2>Daftar Catatan No Surat</h2>
 
-    <form method="GET" style="margin-bottom:20px; display:flex; gap:10px;">
+    <form
+        method="GET"
+        style="margin-bottom:20px; display:flex; gap:10px; align-items:center;"
+    >
 
         <input
             type="text"
@@ -63,8 +94,12 @@
             Cari
         </button>
 
-        <a href="{{ url_for('no_surat') }}" class="btn btn-light">
+        <a href="{{ url_for('no_surat') }}" class="btn btn-red">
             Reset
+        </a>
+
+        <a href="{{ url_for('no_surat_pdf', q=q) }}" class="btn btn-green">
+            Download PDF
         </a>
 
     </form>
@@ -75,7 +110,7 @@
             <th style="width:80px;">ID</th>
             <th>No Surat</th>
             <th>Keterangan</th>
-            <th style="width:120px;">Aksi</th>
+            <th style="width:180px;">Aksi</th>
         </tr>
 
         {% for r in rows %}
@@ -85,15 +120,29 @@
             <td>{{ r.no_surat }}</td>
             <td>{{ r.keterangan }}</td>
             <td>
-                <form
-                    method="POST"
-                    action="{{ url_for('no_surat_delete', id=r.id) }}"
-                    onsubmit="return confirm('Yakin ingin menghapus catatan ini?')"
-                >
-                    <button type="submit" class="btn btn-orange">
-                        Hapus
-                    </button>
-                </form>
+
+                <div style="display:flex; gap:8px; align-items:center;">
+
+                    <a
+                        href="{{ url_for('no_surat_edit', id=r.id) }}"
+                        class="btn btn-blue"
+                    >
+                        Edit
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('no_surat_delete', id=r.id) }}"
+                        onsubmit="return confirm('Yakin ingin menghapus catatan ini?')"
+                        style="margin:0;"
+                    >
+                        <button type="submit" class="btn btn-red">
+                            Hapus
+                        </button>
+                    </form>
+
+                </div>
+
             </td>
         </tr>
 
