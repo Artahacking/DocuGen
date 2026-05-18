@@ -913,54 +913,97 @@ def surat_delete(id):
     return redirect(url_for('arsip'))
 
 # ======================================================
-# ARSIP
+# ARSIP DENGAN PAGINATION
 # ======================================================
 
 @app.route('/arsip')
 @login_required
 def arsip():
 
-    q = request.args.get('q', '')
-    jenis = request.args.get('jenis', '')
-    status = request.args.get('status', '')
+    q = request.args.get('q', '').strip()
+    jenis = request.args.get('jenis', '').strip()
+    status = request.args.get('status', '').strip()
 
-    sql = 'SELECT * FROM surat WHERE 1=1'
+    try:
+        page = int(request.args.get('page', 1))
+    except:
+        page = 1
 
+    try:
+        per_page = int(request.args.get('per_page', 10))
+    except:
+        per_page = 10
+
+    if page < 1:
+        page = 1
+
+    # Batasi agar tidak terlalu berat
+    if per_page < 5:
+        per_page = 5
+
+    if per_page > 50:
+        per_page = 50
+
+    where = ' WHERE 1=1 '
     params = []
 
     if q:
-
-        sql += '''
+        where += '''
             AND
             (
                 judul LIKE %s
                 OR nomor_surat LIKE %s
+                OR tanggal LIKE %s
             )
         '''
 
         params += [
             f'%{q}%',
+            f'%{q}%',
             f'%{q}%'
         ]
 
     if jenis:
-
-        sql += ' AND jenis=%s'
-
+        where += ' AND jenis=%s '
         params.append(jenis)
 
     if status:
-
-        sql += ' AND status=%s'
-
+        where += ' AND status=%s '
         params.append(status)
-
-    sql += ' ORDER BY id DESC'
 
     con = db()
     cur = con.cursor(dictionary=True)
 
-    cur.execute(sql, params)
+    # Hitung total semua data sesuai filter
+    count_sql = 'SELECT COUNT(*) AS total FROM surat ' + where
+
+    cur.execute(count_sql, params)
+
+    total_data = cur.fetchone()['total']
+
+    total_pages = (total_data + per_page - 1) // per_page
+
+    if total_pages < 1:
+        total_pages = 1
+
+    if page > total_pages:
+        page = total_pages
+
+    offset = (page - 1) * per_page
+
+    # Ambil data sesuai halaman
+    data_sql = '''
+        SELECT *
+        FROM surat
+    ''' + where + '''
+        ORDER BY id DESC
+        LIMIT %s OFFSET %s
+    '''
+
+    cur.execute(
+        data_sql,
+        params + [per_page, offset]
+    )
 
     rows = cur.fetchall()
 
@@ -975,7 +1018,17 @@ def arsip():
 
         jenis_surat=JENIS_SURAT,
 
-        user=current_user()
+        user=current_user(),
+
+        q=q,
+        jenis=jenis,
+        status=status,
+
+        page=page,
+        per_page=per_page,
+        total_data=total_data,
+        total_pages=total_pages,
+        start_no=offset + 1
 
     )
 
