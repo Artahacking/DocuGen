@@ -1193,52 +1193,14 @@ def pengaturan():
 
     )
     
-    # ======================================================
+  # ======================================================
 # CATATAN NO SURAT
 # ======================================================
 
-@app.route('/no-surat', methods=['GET', 'POST'])
-@login_required
-def no_surat():
+def get_catatan_no_surat(q=''):
 
     con = db()
     cur = con.cursor(dictionary=True)
-
-    if request.method == 'POST':
-
-        no_surat = request.form.get('no_surat', '').strip()
-        keterangan = request.form.get('keterangan', '').strip()
-
-        if not no_surat:
-            flash('No surat wajib diisi')
-            return redirect(url_for('no_surat'))
-
-        cur.execute(
-            '''
-            INSERT INTO catatan_no_surat
-            (
-                no_surat,
-                keterangan
-            )
-            VALUES
-            (%s, %s)
-            ''',
-            (
-                no_surat,
-                keterangan
-            )
-        )
-
-        con.commit()
-
-        flash('Catatan no surat berhasil ditambahkan')
-
-        cur.close()
-        con.close()
-
-        return redirect(url_for('no_surat'))
-
-    q = request.args.get('q', '').strip()
 
     sql = 'SELECT * FROM catatan_no_surat WHERE 1=1'
     params = []
@@ -1266,10 +1228,128 @@ def no_surat():
     cur.close()
     con.close()
 
+    return rows
+
+
+@app.route('/no-surat', methods=['GET', 'POST'])
+@login_required
+def no_surat():
+
+    if request.method == 'POST':
+
+        no_surat_value = request.form.get('no_surat', '').strip()
+        keterangan = request.form.get('keterangan', '').strip()
+
+        if not no_surat_value:
+            flash('No surat wajib diisi')
+            return redirect(url_for('no_surat'))
+
+        con = db()
+        cur = con.cursor()
+
+        cur.execute(
+            '''
+            INSERT INTO catatan_no_surat
+            (
+                no_surat,
+                keterangan
+            )
+            VALUES
+            (%s, %s)
+            ''',
+            (
+                no_surat_value,
+                keterangan
+            )
+        )
+
+        con.commit()
+
+        cur.close()
+        con.close()
+
+        flash('Catatan no surat berhasil ditambahkan')
+
+        return redirect(url_for('no_surat'))
+
+    q = request.args.get('q', '').strip()
+
+    rows = get_catatan_no_surat(q)
+
     return render_template(
         'no_surat.html',
         rows=rows,
         q=q,
+        edit_row=None,
+        user=current_user()
+    )
+
+
+@app.route('/no-surat/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def no_surat_edit(id):
+
+    con = db()
+    cur = con.cursor(dictionary=True)
+
+    cur.execute(
+        'SELECT * FROM catatan_no_surat WHERE id=%s',
+        (id,)
+    )
+
+    edit_row = cur.fetchone()
+
+    if not edit_row:
+        cur.close()
+        con.close()
+        abort(404)
+
+    if request.method == 'POST':
+
+        no_surat_value = request.form.get('no_surat', '').strip()
+        keterangan = request.form.get('keterangan', '').strip()
+
+        if not no_surat_value:
+            flash('No surat wajib diisi')
+            cur.close()
+            con.close()
+            return redirect(url_for('no_surat_edit', id=id))
+
+        cur.execute(
+            '''
+            UPDATE catatan_no_surat
+            SET
+                no_surat=%s,
+                keterangan=%s
+            WHERE id=%s
+            ''',
+            (
+                no_surat_value,
+                keterangan,
+                id
+            )
+        )
+
+        con.commit()
+
+        cur.close()
+        con.close()
+
+        flash('Catatan no surat berhasil diperbarui')
+
+        return redirect(url_for('no_surat'))
+
+    cur.close()
+    con.close()
+
+    q = request.args.get('q', '').strip()
+    rows = get_catatan_no_surat(q)
+
+    return render_template(
+        'no_surat.html',
+        rows=rows,
+        q=q,
+        edit_row=edit_row,
         user=current_user()
     )
 
@@ -1294,6 +1374,44 @@ def no_surat_delete(id):
     flash('Catatan no surat berhasil dihapus')
 
     return redirect(url_for('no_surat'))
+
+
+@app.route('/no-surat/pdf')
+@login_required
+def no_surat_pdf():
+
+    q = request.args.get('q', '').strip()
+
+    rows = get_catatan_no_surat(q)
+
+    html = render_template(
+        'pdf_no_surat.html',
+        rows=rows,
+        q=q,
+        tanggal_cetak=datetime.now().strftime('%d-%m-%Y %H:%M'),
+        user=current_user()
+    )
+
+    pdf = io.BytesIO()
+
+    result = pisa.CreatePDF(
+        src=io.StringIO(html),
+        dest=pdf,
+        encoding='utf-8',
+        link_callback=link_callback
+    )
+
+    if result.err:
+        abort(500, 'PDF catatan no surat gagal dibuat.')
+
+    pdf.seek(0)
+
+    return send_file(
+        pdf,
+        as_attachment=True,
+        download_name='daftar_catatan_no_surat.pdf',
+        mimetype='application/pdf'
+    )
 
 # ======================================================
 # FILTER RUPIAH
