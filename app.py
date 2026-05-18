@@ -1,22 +1,10 @@
 import os
 import json
 import io
-
 from datetime import datetime
 from functools import wraps
-
-from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    session,
-    flash,
-    send_file,
-    abort
-)
-
+from urllib.parse import urlparse
+from flask import (Flask, render_template, request, redirect, url_for, session, flash, send_file, abort)
 import mysql.connector
 from xhtml2pdf import pisa
 
@@ -38,6 +26,7 @@ DB_CONFIG = {
     'password': os.getenv('MYSQLPASSWORD'),
     'database': os.getenv('MYSQLDATABASE')
 }
+
 
 # ======================================================
 # JENIS SURAT
@@ -836,6 +825,84 @@ def surat_preview(id):
         user=current_user()
 
     )
+    
+    
+# ======================================================
+# PDF HELPER
+# ======================================================
+
+def clean_filename(text):
+    text = str(text or 'dokumen')
+    aman = ''
+
+    for ch in text:
+        if ch.isalnum() or ch in ['-', '_']:
+            aman += ch
+        elif ch == ' ':
+            aman += '_'
+
+    return aman.strip('_') or 'dokumen'
+
+
+def find_logo_static_path():
+    """
+    Mencari logo otomatis di folder static.
+    Jika nama logo kamu beda, tambahkan namanya di daftar candidates.
+    """
+
+    candidates = [
+        'logo.png',
+        'logo.jpg',
+        'logo.jpeg',
+        'img/logo.png',
+        'img/logo.jpg',
+        'img/logo.jpeg',
+        'images/logo.png',
+        'images/logo.jpg',
+        'images/logo.jpeg',
+        'assets/logo.png',
+        'assets/logo.jpg',
+        'assets/logo.jpeg'
+    ]
+
+    for item in candidates:
+        full_path = os.path.join(app.root_path, 'static', item)
+
+        if os.path.isfile(full_path):
+            return '/static/' + item.replace('\\', '/')
+
+    return ''
+
+
+def link_callback(uri, rel):
+    """
+    Supaya xhtml2pdf bisa baca gambar dari folder static.
+    """
+
+    from urllib.parse import urlparse
+
+    parsed = urlparse(uri)
+    path = parsed.path
+
+    if path.startswith('/static/'):
+        full_path = os.path.join(
+            app.root_path,
+            path.lstrip('/')
+        )
+
+        if os.path.isfile(full_path):
+            return full_path
+
+    if uri.startswith('static/'):
+        full_path = os.path.join(
+            app.root_path,
+            uri
+        )
+
+        if os.path.isfile(full_path):
+            return full_path
+
+    return uri
 
 # ======================================================
 # PDF
@@ -846,45 +913,49 @@ def surat_preview(id):
 def surat_pdf(id):
 
     surat = get_surat_or_404(id)
+    data = surat['data_dict']
+
+    if surat['jenis'] == 'daftar_pengeluaran_rill':
+        template_pdf = 'pdf_daftar_pengeluaran_rill.html'
+    else:
+        template_pdf = 'preview_' + surat['jenis'] + '.html'
+
+    logo_src = find_logo_static_path()
 
     html = render_template(
-
-        'preview_' + surat['jenis'] + '.html',
-
+        template_pdf,
         surat=surat,
-
-        data=surat['data_dict'],
-
+        data=data,
         pdf=True,
-
+        logo_src=logo_src,
         user=current_user()
-
     )
 
     pdf = io.BytesIO()
 
-    pisa.CreatePDF(
-
-        io.StringIO(html),
-
+    result = pisa.CreatePDF(
+        src=io.StringIO(html),
         dest=pdf,
-
-        encoding='utf-8'
-
+        encoding='utf-8',
+        link_callback=link_callback
     )
+
+    if result.err:
+        abort(500, 'PDF gagal dibuat. Periksa template PDF dan file logo.')
 
     pdf.seek(0)
 
+    nama_file = clean_filename(
+        data.get('nama') or surat.get('judul') or surat['jenis']
+    )
+
+    download = request.args.get('download') == '1'
+
     return send_file(
-
         pdf,
-
-        as_attachment=True,
-
-        download_name=f"{surat['jenis']}_{id}.pdf",
-
+        as_attachment=download,
+        download_name=f"daftar_pengeluaran_riil_{nama_file}.pdf",
         mimetype='application/pdf'
-
     )
 
 # ======================================================
@@ -1031,7 +1102,6 @@ def arsip():
         start_no=offset + 1
 
     )
-
 # ======================================================
 # PENGATURAN
 # ======================================================
